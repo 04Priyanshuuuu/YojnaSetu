@@ -104,8 +104,9 @@ export const Recommendations: React.FC = () => {
   const [missingProfileFields, setMissingProfileFields] = useState<MissingFieldDetail[]>([]);
 
   // Mode Selection State
-  const [inputMode, setInputMode] = useState<InputMode>('PROFILE');
-
+  const [inputMode, setInputMode] = useState<InputMode>(
+  isAuthenticated ? 'PROFILE' : 'TYPE'
+);
   // Text Input State
   const DEFAULT_USER_TEXT =
     'I am a 28 year old woman from Uttar Pradesh. I belong to SC category. My annual income is around 1.8 lakh. I want to start a small tailoring business with a project cost of 1 lakh.';
@@ -159,6 +160,12 @@ export const Recommendations: React.FC = () => {
       stopListening();
     }
   }, [inputMode]);
+
+  useEffect(() => {
+  if (!isAuthenticated && inputMode === 'PROFILE') {
+    setInputMode('TYPE');
+  }
+}, [isAuthenticated, inputMode]);
 
   const startListening = () => {
     setVoiceError(null);
@@ -750,25 +757,53 @@ export const Recommendations: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <button
-            type="button"
-            onClick={() => setInputMode('PROFILE')}
-            className={`p-4 rounded-2xl border text-left transition flex flex-col justify-between space-y-2 ${
-              inputMode === 'PROFILE'
-                ? 'bg-sky-50 border-gov-blue ring-2 ring-gov-blue shadow-md'
-                : 'bg-white border-slate-200 hover:border-slate-300 shadow-xs'
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              <div className="w-8 h-8 rounded-lg bg-sky-100 text-sky-800 flex items-center justify-center font-bold">
-                <User className="w-4 h-4" />
-              </div>
-              {inputMode === 'PROFILE' && <Check className="w-4 h-4 text-gov-blue font-extrabold" />}
-            </div>
-            <div>
-              <h3 className="font-extrabold text-slate-900 text-xs">{t('recommendations.modeProfile', '👤 Saved Citizen Profile')}</h3>
-              <p className="text-[11px] text-slate-500 mt-0.5">{t('recommendations.modeProfileDesc', 'Uses your authoritative saved profile parameters.')}</p>
-            </div>
-          </button>
+  type="button"
+  disabled={!isAuthenticated}
+  onClick={() => {
+    if (isAuthenticated) {
+      setInputMode('PROFILE');
+    }
+  }}
+  className={`p-4 rounded-2xl border text-left transition flex flex-col justify-between space-y-2 ${
+    !isAuthenticated
+      ? 'bg-slate-50 border-slate-200 opacity-70 cursor-not-allowed'
+      : inputMode === 'PROFILE'
+      ? 'bg-sky-50 border-gov-blue ring-2 ring-gov-blue shadow-md'
+      : 'bg-white border-slate-200 hover:border-slate-300 shadow-xs'
+  }`}
+>
+  <div className="flex items-center justify-between">
+    <div className="w-8 h-8 rounded-lg bg-sky-100 text-sky-800 flex items-center justify-center font-bold">
+      <User className="w-4 h-4" />
+    </div>
+
+    {isAuthenticated && inputMode === 'PROFILE' && (
+      <Check className="w-4 h-4 text-gov-blue font-extrabold" />
+    )}
+  </div>
+
+  <div>
+    <h3 className="font-extrabold text-slate-900 text-xs">
+      {t('recommendations.modeProfile', '👤 Saved Citizen Profile')}
+    </h3>
+
+    {isAuthenticated ? (
+      <p className="text-[11px] text-slate-500 mt-0.5">
+        {t(
+          'recommendations.modeProfileDesc',
+          'Uses your authoritative saved profile parameters.'
+        )}
+      </p>
+    ) : (
+      <p className="text-[11px] text-rose-600 font-bold mt-0.5">
+        🔒 {t(
+          'recommendations.signInFirst',
+          'Sign in first to use this feature'
+        )}
+      </p>
+    )}
+  </div>
+</button>
 
           <button
             type="button"

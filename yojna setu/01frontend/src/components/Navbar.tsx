@@ -518,21 +518,22 @@ export const Navbar: React.FC = () => {
   return (
 
     <header
-      ref={headerRef}
-      className="
-        sticky
-        top-0
-        z-[100]
-        w-full
-        max-w-full
-        overflow-visible
-        select-none
-        bg-[#861823]
-        text-white
-        border-b
-        border-white/10
-      "
-    >
+  ref={headerRef}
+  className="
+    yojnasetu-navbar
+    sticky
+    top-0
+    z-[100]
+    w-full
+    max-w-full
+    overflow-visible
+    select-none
+    bg-[#861823]
+    text-white
+    border-b
+    border-white/10
+  "
+>
 
       {/* =========================================================
           TOP GOVERNMENT STRIP
@@ -631,36 +632,12 @@ export const Navbar: React.FC = () => {
           >
             {t(
               'nav.portalSub',
-              'National Welfare & Credit Guidance Platform'
+              'MINISTRY OF SOCIAL JUSTICE AND EMPOWERMENT'
             )}
           </span>
 
 
-          <span
-            className="
-              hidden
-              md:inline
-              text-slate-600
-              shrink-0
-            "
-          >
-            •
-          </span>
-
-
-          <span
-            className="
-              hidden
-              sm:inline
-              text-slate-400
-              text-[10px]
-              sm:text-[11px]
-              font-mono
-              shrink-0
-            "
-          >
-            yojnasetu.gov.in
-          </span>
+          
 
         </div>
 
@@ -762,7 +739,7 @@ export const Navbar: React.FC = () => {
                 transition
                 ${
                   textSize === 'small'
-                    ? 'bg-sky-600 text-white'
+                    ? 'bg-white/50 text-white'
                     : 'text-slate-300 hover:bg-white/10'
                 }
               `}
@@ -787,7 +764,7 @@ export const Navbar: React.FC = () => {
                 transition
                 ${
                   textSize === 'default'
-                    ? 'bg-sky-600 text-white'
+                    ? 'bg-white/50 text-white'
                     : 'text-slate-300 hover:bg-white/10'
                 }
               `}
@@ -812,7 +789,7 @@ export const Navbar: React.FC = () => {
                 transition
                 ${
                   textSize === 'large'
-                    ? 'bg-sky-600 text-white'
+                    ? 'bg-white/50 text-white'
                     : 'text-slate-300 hover:bg-white/10'
                 }
               `}
@@ -855,13 +832,16 @@ export const Navbar: React.FC = () => {
               aria-haspopup="true"
             >
 
-              <Globe
-                className="
-                  w-3.5
-                  h-3.5
-                  text-sky-400
-                "
-              />
+              <img
+  src="/language-icon.png"
+  alt="Language"
+  className="
+    w-7
+    h-7
+    object-contain
+    shrink-0
+  "
+/>
 
               <span className="hidden sm:inline">
                 {currentLang.nativeName}

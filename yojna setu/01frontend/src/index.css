@@ -130,3 +130,25 @@
 .leaflet-popup {
   z-index: 30 !important;
 }
+
+
+/* =========================================================
+   YojnaSetu Navbar Accessibility Isolation
+   A+ / A- should NOT resize the navbar.
+   The rest of the website will continue to scale normally.
+   ========================================================= */
+
+/* Keep navbar visually at its normal 16px root scale */
+html[data-text-size="large"] .yojnasetu-navbar {
+  zoom: 0.8888889;
+}
+
+/* A- should also keep navbar at its normal visual scale */
+html[data-text-size="small"] .yojnasetu-navbar {
+  zoom: 1.0666667;
+}
+
+/* Default = normal */
+html[data-text-size="default"] .yojnasetu-navbar {
+  zoom: 1;
+}
