@@ -12,7 +12,6 @@ import {
   Building2,
   Phone,
   Mail,
-  Globe,
   AlertCircle,
   Search,
   Info,
@@ -24,7 +23,8 @@ import {
   Lock,
   Unlock,
   RotateCcw,
-  Compass
+  Compass,
+  Globe
 } from 'lucide-react';
 
 interface MapLocatorProps {

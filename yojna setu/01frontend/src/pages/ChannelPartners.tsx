@@ -115,35 +115,16 @@ export const ChannelPartners: React.FC = () => {
         </div>
       </div>
 
-      {/* Selected Partner Action Banner */}
-      {selectedPartnerId && (
-        <div className="bg-emerald-50 border-2 border-emerald-500 rounded-2xl p-6 shadow-md flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xl shrink-0 mt-0.5">
-              ✓
-            </div>
-            <div>
-              <h3 className="font-extrabold text-slate-900 text-base">
-                {t('channelPartners.partnerSelected', 'Channel Partner Selected for Application')}
-              </h3>
-              <p className="text-xs text-slate-600 mt-1 max-w-xl">
-                {t('channelPartners.partnerSelectedDesc', 'You have identified an authorized local partner. YojnaSetu provides eligibility guidance and locates verified partners, but final application submission occurs directly on official government/bank portals.')}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            {selectedScheme && (
-              <button
-                onClick={() => setIsPortalModalOpen(true)}
-                className="bg-gov-saffron hover:bg-orange-600 text-white font-extrabold text-xs px-6 py-3 rounded-xl shadow-lg transition flex items-center justify-center gap-2 w-full md:w-auto"
-              >
-                {t('channelPartners.applyOfficialPortal', 'Apply on Official Portal')} <ExternalLink className="w-4 h-4" />
-              </button>
-            )}
-          </div>
-        </div>
-      )}
+      {/* Minimal Application Notice */}
+{selectedPartnerId && (
+  <div className="flex items-center gap-2 px-1 py-1 text-[11px] text-slate-500">
+    <Info className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+    <span>
+      YojnaSetu only provides eligibility guidance and partner discovery.
+      Applications are submitted directly on official government/bank portals.
+    </span>
+  </div>
+)}
 
       {/* Map Locator Component */}
       <MapLocator

@@ -344,17 +344,7 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Official Government Guidance Notice */}
-      <div className="bg-sky-50/80 border border-sky-200 rounded-2xl p-4 sm:p-5 flex items-start gap-3.5 text-xs text-sky-950">
-        <ShieldCheck className="w-5 h-5 text-sky-700 shrink-0 mt-0.5" />
-        <div className="space-y-1">
-          <h4 className="font-bold text-sky-900">{t('dashboard.governanceNoticeTitle', 'Official Government Guidance & Prefill Bridge')}</h4>
-          <p className="text-sky-800 leading-relaxed text-[11px]">
-            {t('dashboard.governanceNoticeDesc', 'YojnaSetu provides citizen guidance, document checklists, partner locators, and profile prefill. Final application submission, document verification, and benefit disbursement are managed directly by the respective Ministry or Nodal Agency.')}
-          </p>
-        </div>
-      </div>
-
+      
 
       {/* Active Applications Section */}
       <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
