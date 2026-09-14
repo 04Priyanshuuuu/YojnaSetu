@@ -493,6 +493,12 @@ export const Navbar: React.FC = () => {
       (l) => l.code === i18n.language
     ) || SUPPORTED_LANGUAGES[0];
 
+  // Keep the original navbar sizing for English and Hindi.
+  // Only compact translated labels for other supported languages.
+  const languageCode = i18n.language?.split('-')[0]?.toLowerCase();
+  const isCompactLanguage =
+    languageCode !== 'en' && languageCode !== 'hi';
+
 
   // ─────────────────────────────────────────────────────────────
   // ACTIVE STATES
@@ -676,7 +682,7 @@ export const Navbar: React.FC = () => {
               className="
                 w-3
                 h-3
-                text-emerald-400
+                text-white/80
               "
             />
 
@@ -1101,7 +1107,7 @@ export const Navbar: React.FC = () => {
               ===================================================== */}
 
           <nav
-            className="
+            className={`
               hidden
               xl:flex
               flex-1
@@ -1116,7 +1122,8 @@ export const Navbar: React.FC = () => {
               p-1
               shadow-sm
               overflow-visible
-            "
+              ${isCompactLanguage ? 'gap-0 min-w-0' : ''}
+            `}
           >
 
 
@@ -1126,6 +1133,8 @@ export const Navbar: React.FC = () => {
               to="/"
               className={`
                 shrink
+                min-w-0
+                overflow-hidden
                 px-2
                 2xl:px-3
                 py-2
@@ -1160,7 +1169,13 @@ export const Navbar: React.FC = () => {
                 "
               />
 
-              <span>
+              <span
+                className={
+                  isCompactLanguage
+                    ? 'min-w-0 max-w-[85px] truncate'
+                    : ''
+                }
+              >
                 {t(
                   'nav.home',
                   'Home'
@@ -1185,6 +1200,8 @@ export const Navbar: React.FC = () => {
                   )
                 }
                 className={`
+                  min-w-0
+                  overflow-hidden
                   px-2
                   2xl:px-3
                   py-2
@@ -1224,7 +1241,13 @@ export const Navbar: React.FC = () => {
                   "
                 />
 
-                <span>
+                <span
+                  className={
+                    isCompactLanguage
+                      ? 'min-w-0 max-w-[105px] truncate'
+                      : ''
+                  }
+                >
                   {t(
                     'nav.schemes',
                     'Explore Schemes'
@@ -1709,6 +1732,8 @@ export const Navbar: React.FC = () => {
               to="/recommendations"
               className={`
                 shrink
+                min-w-0
+                overflow-hidden
                 px-2
                 2xl:px-3
                 py-2
@@ -1743,7 +1768,13 @@ export const Navbar: React.FC = () => {
                 "
               />
 
-              <span>
+              <span
+                className={
+                  isCompactLanguage
+                    ? 'min-w-0 max-w-[105px] truncate'
+                    : ''
+                }
+              >
                 {t(
                   'nav.recommendations',
                   'Smart Matching'
@@ -1759,6 +1790,8 @@ export const Navbar: React.FC = () => {
               to="/calculator"
               className={`
                 shrink
+                min-w-0
+                overflow-hidden
                 px-2
                 2xl:px-3
                 py-2
@@ -1793,7 +1826,13 @@ export const Navbar: React.FC = () => {
                 "
               />
 
-              <span>
+              <span
+                className={
+                  isCompactLanguage
+                    ? 'min-w-0 max-w-[115px] truncate'
+                    : ''
+                }
+              >
                 {t(
                   'nav.calculator',
                   'Financial Calculator'
@@ -1809,6 +1848,8 @@ export const Navbar: React.FC = () => {
               to="/channel-partners"
               className={`
                 shrink
+                min-w-0
+                overflow-hidden
                 px-2
                 2xl:px-3
                 py-2
@@ -1843,7 +1884,13 @@ export const Navbar: React.FC = () => {
                 "
               />
 
-              <span>
+              <span
+                className={
+                  isCompactLanguage
+                    ? 'min-w-0 max-w-[115px] truncate'
+                    : ''
+                }
+              >
                 {t(
                   'nav.partnerLocator',
                   'Find Nearby Partner'
@@ -1868,6 +1915,8 @@ export const Navbar: React.FC = () => {
                   )
                 }
                 className={`
+                  min-w-0
+                  overflow-hidden
                   px-2
                   2xl:px-3
                   py-2
@@ -1904,7 +1953,13 @@ export const Navbar: React.FC = () => {
                   "
                 />
 
-                <span>
+                <span
+                  className={
+                    isCompactLanguage
+                      ? 'min-w-0 max-w-[75px] truncate'
+                      : ''
+                  }
+                >
                   {t(
                     'nav.more',
                     'More'
@@ -2117,6 +2172,9 @@ export const Navbar: React.FC = () => {
                       )
                     }
                     className={`
+                      min-w-0
+                      max-w-full
+                      overflow-hidden
                       px-2.5
                       2xl:px-4
                       py-2
@@ -2151,7 +2209,13 @@ export const Navbar: React.FC = () => {
                       "
                     />
 
-                    <span>
+                    <span
+                      className={
+                        isCompactLanguage
+                          ? 'min-w-0 max-w-[120px] truncate'
+                          : ''
+                      }
+                    >
                       {t(
                         'nav.citizenHub',
                         'Citizen Hub'
@@ -2646,7 +2710,10 @@ export const Navbar: React.FC = () => {
                     htmlFor="navbar-scheme-search"
                     className="sr-only"
                   >
-                    Search schemes
+                    {t(
+    'nav.searchSchemes',
+    'Search schemes...'
+  )}
                   </label>
 
                   <input
@@ -2658,7 +2725,11 @@ export const Navbar: React.FC = () => {
                         event.target.value
                       )
                     }
-                    placeholder="Search schemes..."
+                    placeholder={t(
+    'nav.searchSchemes',
+    'Search schemes...'
+  )}
+  
                     className="
                       min-w-0
                       flex-1
@@ -2684,7 +2755,10 @@ export const Navbar: React.FC = () => {
                       transition-colors
                       shrink-0
                     "
-                    aria-label="Search schemes"
+                    aria-label={t(
+  'nav.searchSchemes',
+  'Search schemes...'
+)}
                   >
 
                     <Search

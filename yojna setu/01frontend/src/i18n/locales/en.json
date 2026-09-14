@@ -1032,7 +1032,8 @@
     "homeAria": "YojnaSetu Home",
     "schemesAria": "Schemes Directory Mega Menu",
     "toggleMobileNav": "Toggle mobile navigation menu",
-    "brand": "YojnaSetu"
+    "brand": "YojnaSetu",
+    "searchSchemes": "Search schemes..."
   },
   "notifications": {
     "allCaughtUp": "You're all caught up with your updates.",
