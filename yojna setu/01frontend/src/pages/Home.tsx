@@ -281,49 +281,108 @@ export const Home: React.FC = () => {
       ============================================================ */}
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    {/* 90 Government Schemes */}
+    <div className="group bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 sm:p-6 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+      
+      {/* Icon */}
+      <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="1.8"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3 21h18M4 18h16M5 18V9l7-5 7 5v9M9 18v-5h6v5M8 9h.01M12 9h.01M16 9h.01"
+          />
+        </svg>
+      </div>
 
-          {/* 90 Government Schemes */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-5 sm:p-6 text-center hover:shadow-md transition">
+      <div className="text-3xl sm:text-4xl font-extrabold text-slate-900">
+        90
+      </div>
 
-            <div className="text-3xl sm:text-4xl font-extrabold text-slate-900">
-              90
-            </div>
+      <div className="mt-1 text-sm font-medium text-slate-500">
+        Government Schemes
+      </div>
 
-            <div className="mt-1 text-sm font-medium text-slate-500">
-              Government Schemes
-            </div>
-          </div>
-
-
-          {/* 128 Channel Partners */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-5 sm:p-6 text-center hover:shadow-md transition">
-
-            <div className="text-3xl sm:text-4xl font-extrabold text-gov-saffron">
-              128
-            </div>
-
-            <div className="mt-1 text-sm font-medium text-slate-500">
-              Channel Partners
-            </div>
-          </div>
+      <div className="mt-3 mx-auto h-1 w-10 rounded-full bg-blue-500 opacity-70 group-hover:w-16 transition-all duration-300" />
+    </div>
 
 
-          {/* 12 Indian Languages */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-5 sm:p-6 text-center hover:shadow-md transition">
+    {/* 128 Channel Partners */}
+    <div className="group bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 sm:p-6 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+      
+      {/* Icon */}
+      <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-orange-50 text-gov-saffron group-hover:bg-gov-saffron group-hover:text-white transition-colors duration-300">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="1.8"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM5 21a7 7 0 0114 0M19 8a3 3 0 00-2.5-2.95M19 21a6 6 0 00-3-5.2M5 8a3 3 0 012.5-2.95M5 21a6 6 0 013-5.2"
+          />
+        </svg>
+      </div>
 
-            <div className="text-3xl sm:text-4xl font-extrabold text-sky-600">
-              12
-            </div>
+      <div className="text-3xl sm:text-4xl font-extrabold text-gov-saffron">
+        128
+      </div>
 
-            <div className="mt-1 text-sm font-medium text-slate-500">
-              Indian Languages
-            </div>
-          </div>
+      <div className="mt-1 text-sm font-medium text-slate-500">
+        Channel Partners
+      </div>
 
-        </div>
-      </section>
+      <div className="mt-3 mx-auto h-1 w-10 rounded-full bg-gov-saffron opacity-70 group-hover:w-16 transition-all duration-300" />
+    </div>
+
+
+    {/* 12 Indian Languages */}
+    <div className="group bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 sm:p-6 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+      
+      {/* Icon */}
+      <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-sky-50 text-sky-600 group-hover:bg-sky-600 group-hover:text-white transition-colors duration-300">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="1.8"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3 5h12M9 3v2m3 14l3-8 3 8m-5-2h4M14 5a8 8 0 01-8 8M6 5a8 8 0 008 8"
+          />
+        </svg>
+      </div>
+
+      <div className="text-3xl sm:text-4xl font-extrabold text-sky-600">
+        12
+      </div>
+
+      <div className="mt-1 text-sm font-medium text-slate-500">
+        Indian Languages
+      </div>
+
+      <div className="mt-3 mx-auto h-1 w-10 rounded-full bg-sky-500 opacity-70 group-hover:w-16 transition-all duration-300" />
+    </div>
+
+  </div>
+</section>
 
 
       
