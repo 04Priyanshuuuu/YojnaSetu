@@ -1,0 +1,30 @@
+export const ROUTES = {
+  HOME: "/(tabs)",
+  LOGIN: "/(auth)/login",
+  REGISTER: "/(auth)/register",
+  SCHEMES: "/(tabs)/schemes",
+  SCHEME_DETAIL: "/schemes/[id]",
+  SMART_MATCH: "/(tabs)/match",
+  CALCULATOR: "/(tabs)/calculator",
+  PROFILE: "/(tabs)/profile",
+  SAVED: "/saved",
+  APPLICATIONS: "/applications",
+  APPLICATION_DETAIL: "/applications/[id]",
+  NOTIFICATIONS: "/notifications",
+  COMPARE: "/compare",
+  PARTNERS: "/partners",
+  PARTNER_DETAIL: "/partners/[id]",
+  COPILOT: "/copilot",
+  RESOURCES: "/resources",
+  ABOUT: "/about",
+  FAQ: "/faq",
+  SETTINGS: "/settings",
+  LANGUAGE: "/language",
+  UNAUTHORIZED: "/unauthorized",
+  PARTNER: "/partner",
+  PARTNER_APPLICATIONS: "/partner/applications/[id]",
+  ADMIN: "/admin",
+};
+
+export const routeFor = (route: string, id?: string) =>
+  id ? route.replace("[id]", id) : route;
