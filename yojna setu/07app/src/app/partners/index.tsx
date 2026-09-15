@@ -23,7 +23,7 @@ import {
 import { useTranslation } from "react-i18next";
 
 import Screen from "../../components/Screen";
-import MapLocator from "./MapLocator";
+import MapLocator from "../../components/partners/MapLocator";
 import { schemeApi } from "../../api/schemeApi";
 import type { Scheme } from "../../types";
 
@@ -41,14 +41,14 @@ export default function PartnersScreen() {
     : params.scheme_id ?? "";
 
   const loanCategoryParam = Array.isArray(
-    params.loan_category
+    params.loan_category,
   )
     ? params.loan_category[0] ?? ""
     : params.loan_category ?? "";
 
   const [schemes, setSchemes] = useState<Scheme[]>([]);
   const [selectedSchemeId, setSelectedSchemeId] =
-    useState(schemeIdParam);
+    useState<string>(schemeIdParam);
   const [selectedScheme, setSelectedScheme] =
     useState<Scheme | null>(null);
   const [selectedPartnerId, setSelectedPartnerId] =
@@ -57,9 +57,9 @@ export default function PartnersScreen() {
     useState(true);
 
   const fetchSchemes = useCallback(async () => {
-    try {
-      setIsLoadingSchemes(true);
+    setIsLoadingSchemes(true);
 
+    try {
       const response = await schemeApi.getSchemes({
         page: 1,
         page_size: 100,
@@ -69,7 +69,7 @@ export default function PartnersScreen() {
     } catch (error) {
       console.error(
         "Failed to fetch schemes list:",
-        error
+        error,
       );
       setSchemes([]);
     } finally {
@@ -83,6 +83,7 @@ export default function PartnersScreen() {
 
   useEffect(() => {
     setSelectedSchemeId(schemeIdParam);
+    setSelectedPartnerId(null);
   }, [schemeIdParam]);
 
   useEffect(() => {
@@ -94,7 +95,7 @@ export default function PartnersScreen() {
     const scheme =
       schemes.find(
         (item) =>
-          item.scheme_id === selectedSchemeId
+          item.scheme_id === selectedSchemeId,
       ) ?? null;
 
     setSelectedScheme(scheme);
@@ -115,34 +116,32 @@ export default function PartnersScreen() {
         });
       }
     },
-    [router]
+    [router],
   );
 
   const handlePartnerSelect = useCallback(
     (partnerId: string) => {
       setSelectedPartnerId(partnerId);
     },
-    []
+    [],
   );
 
   const selectedSchemeName = useMemo(
     () => selectedScheme?.scheme_name ?? "",
-    [selectedScheme]
+    [selectedScheme],
   );
 
   return (
-    <Screen scrollable={false}>
+    <Screen scrollable>
       <View style={styles.container}>
-        {/* ─────────────────────────────
-            HEADER BANNER
-        ───────────────────────────── */}
+        {/* Header Banner */}
         <View style={styles.headerBanner}>
           <View style={styles.badgeRow}>
             <View style={styles.geoBadge}>
               <Text style={styles.geoBadgeText}>
                 {t(
                   "channelPartners.geoService",
-                  "GEO-LOCATION SERVICE"
+                  "GEO-LOCATION SERVICE",
                 )}
               </Text>
             </View>
@@ -150,7 +149,7 @@ export default function PartnersScreen() {
             <Text style={styles.verifiedText}>
               {t(
                 "channelPartners.verifiedPartners",
-                "Verified Partners"
+                "Verified Partners",
               )}
             </Text>
           </View>
@@ -164,7 +163,7 @@ export default function PartnersScreen() {
             <Text style={styles.title}>
               {t(
                 "channelPartners.title",
-                "Find a Nearby Channel Partner"
+                "Find a Nearby Channel Partner",
               )}
             </Text>
           </View>
@@ -172,13 +171,14 @@ export default function PartnersScreen() {
           <Text style={styles.subtitle}>
             {t(
               "channelPartners.subtitle",
-              "Locate authorized Public Sector Banks, Regional Rural Banks, NBFC-MFIs, and State Channelizing Agencies supporting official welfare schemes in your area."
+              "Locate authorized Public Sector Banks, Regional Rural Banks, NBFC-MFIs, and State Channelizing Agencies supporting official welfare schemes in your area.",
             )}
           </Text>
 
-          {/* Back to schemes */}
           <Pressable
-            onPress={() => router.push("/(tabs)/schemes")}
+            onPress={() =>
+              router.push("/(tabs)/schemes")
+            }
             style={({ pressed }) => [
               styles.browseSchemesButton,
               pressed && styles.pressed,
@@ -186,7 +186,7 @@ export default function PartnersScreen() {
             accessibilityRole="button"
             accessibilityLabel={t(
               "channelPartners.browseAllSchemes",
-              "Browse All Schemes"
+              "Browse All Schemes",
             )}
           >
             <ArrowLeft
@@ -197,20 +197,18 @@ export default function PartnersScreen() {
             <Text style={styles.browseSchemesText}>
               {t(
                 "channelPartners.browseAllSchemes",
-                "Browse All Schemes"
+                "Browse All Schemes",
               )}
             </Text>
           </Pressable>
         </View>
 
-        {/* ─────────────────────────────
-            SCHEME SELECTOR
-        ───────────────────────────── */}
+        {/* Scheme Selector */}
         <View style={styles.schemeSelector}>
           <Text style={styles.selectorLabel}>
             {t(
               "channelPartners.selectedScheme",
-              "Selected Welfare Scheme:"
+              "Selected Welfare Scheme:",
             )}
           </Text>
 
@@ -236,6 +234,10 @@ export default function PartnersScreen() {
                   !selectedSchemeId &&
                     styles.schemeOptionSelected,
                 ]}
+                accessibilityRole="radio"
+                accessibilityState={{
+                  selected: !selectedSchemeId,
+                }}
               >
                 <View
                   style={[
@@ -258,7 +260,7 @@ export default function PartnersScreen() {
                 >
                   {t(
                     "channelPartners.allEligibleSchemes",
-                    "All Eligible Schemes"
+                    "All Eligible Schemes",
                   )}
                 </Text>
               </Pressable>
@@ -273,7 +275,7 @@ export default function PartnersScreen() {
                     key={scheme.scheme_id}
                     onPress={() =>
                       handleSchemeChange(
-                        scheme.scheme_id
+                        scheme.scheme_id,
                       )
                     }
                     style={[
@@ -281,6 +283,10 @@ export default function PartnersScreen() {
                       active &&
                         styles.schemeOptionSelected,
                     ]}
+                    accessibilityRole="radio"
+                    accessibilityState={{
+                      selected: active,
+                    }}
                   >
                     <View
                       style={[
@@ -323,24 +329,20 @@ export default function PartnersScreen() {
 
               <Text
                 style={styles.selectedSchemeText}
-                numberOfLines={3}
               >
                 {t(
                   "channelPartners.filteringFor",
                   "Filtering partners for {{scheme}}",
                   {
-                    scheme:
-                      selectedSchemeName,
-                  }
+                    scheme: selectedSchemeName,
+                  },
                 )}
               </Text>
             </View>
           )}
         </View>
 
-        {/* ─────────────────────────────
-            APPLICATION NOTICE
-        ───────────────────────────── */}
+        {/* Application Notice */}
         {selectedPartnerId && (
           <View style={styles.notice}>
             <Text style={styles.noticeText}>
@@ -352,9 +354,7 @@ export default function PartnersScreen() {
           </View>
         )}
 
-        {/* ─────────────────────────────
-            NATIVE PARTNER LOCATOR
-        ───────────────────────────── */}
+        {/* Native Partner Locator */}
         <MapLocator
           schemeId={
             selectedSchemeId || undefined
@@ -380,9 +380,9 @@ export default function PartnersScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     width: "100%",
     backgroundColor: "#f8fafc",
+    paddingBottom: 24,
   },
 
   headerBanner: {
@@ -588,4 +588,3 @@ const styles = StyleSheet.create({
     opacity: 0.82,
   },
 });
-

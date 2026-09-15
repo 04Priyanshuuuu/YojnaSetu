@@ -1,4 +1,5 @@
 import { apiClient } from "./client";
+
 import type {
   ApplicationResponse,
   PaginatedApplicationListResponse,
@@ -7,9 +8,15 @@ import type {
 export interface PartnerData {
   partner_id: string;
   name: string;
-  code?: string;
-  partner_type?: string;
-  institution_type?: string;
+
+  code?: string | null;
+
+  partner_type?: string | null;
+  partner_sub_type?: string | null;
+
+  institution_type?: string | null;
+
+  partner_category?: string | null;
 
   address?: string | null;
   district?: string | null;
@@ -19,23 +26,33 @@ export interface PartnerData {
   phone?: string | null;
   email?: string | null;
   website?: string | null;
+
+  service_type?: string | null;
+
+  last_verified_date?: string | null;
+
+  scheme_authorization_level?: string | null;
+  coordinates_status?: string | null;
+
   source_url?: string | null;
 
   latitude?: number | null;
   longitude?: number | null;
 
-  distance_km?: number | null;
+  npa_percentage?: number | null;
+  overdue_percentage?: number | null;
 
-  service_type?: string | null;
-  supported_schemes?: string[];
-
-  is_active?: boolean;
   is_accepting_applications?: boolean;
+  is_active?: boolean;
 
   is_scheme_matched?: boolean;
   is_authorized?: boolean;
 
-  last_verified_date?: string | null;
+  verification_status?: string | null;
+
+  supported_schemes?: string[];
+
+  created_at?: string | null;
 
   [key: string]: unknown;
 }
@@ -47,7 +64,21 @@ export interface NearestPartnerResponse {
 
   is_scheme_matched?: boolean;
 
+  partner_category?: string | null;
+
+  supported_schemes?: string[];
+
   service_type?: string | null;
+
+  authorization_level?: string | null;
+
+  scheme_authorized_category?: string | null;
+
+  scheme_mapping_notes?: string | null;
+
+  suitability_reason?: string | null;
+
+  lending_capacity_status?: string | null;
 
   [key: string]: unknown;
 }
@@ -72,28 +103,20 @@ export interface NearestPartnerParams {
 }
 
 export const partnerApi = {
-  /**
-   * Browse partner directory.
-   */
   browseDirectory: async (
     params?: PartnerDirectoryParams,
   ): Promise<NearestPartnerResponse[]> => {
-    const response = await apiClient.get<NearestPartnerResponse[]>(
-      "/partner/directory",
-      {
-        params,
-      },
-    );
+    const response =
+      await apiClient.get<NearestPartnerResponse[]>(
+        "/partner/directory",
+        {
+          params,
+        },
+      );
 
     return response.data;
   },
 
-  /**
-   * Get nearby channel partners.
-   *
-   * Backend endpoint:
-   * GET /partner/nearest
-   */
   getNearestPartners: async (
     latitude: number,
     longitude: number,
@@ -105,29 +128,27 @@ export const partnerApi = {
     state?: string,
     serviceType?: string,
   ): Promise<NearestPartnerResponse[]> => {
-    const response = await apiClient.get<NearestPartnerResponse[]>(
-      "/partner/nearest",
-      {
-        params: {
-          latitude,
-          longitude,
-          radius_km: radiusKm,
-          scheme_id: schemeId,
-          loan_category: loanCategory,
-          partner_category: partnerCategory,
-          district,
-          state,
-          service_type: serviceType,
+    const response =
+      await apiClient.get<NearestPartnerResponse[]>(
+        "/partner/nearest",
+        {
+          params: {
+            latitude,
+            longitude,
+            radius_km: radiusKm,
+            scheme_id: schemeId,
+            loan_category: loanCategory,
+            partner_category: partnerCategory,
+            district,
+            state,
+            service_type: serviceType,
+          },
         },
-      },
-    );
+      );
 
     return response.data;
   },
 
-  /**
-   * Get partner applications.
-   */
   getPartnerApplications: async (params?: {
     status?: string;
     page?: number;
@@ -144,55 +165,163 @@ export const partnerApi = {
     return response.data;
   },
 
-  /**
-   * Get partner application detail.
-   */
   getPartnerApplicationDetail: async (
     applicationId: string,
   ): Promise<ApplicationResponse> => {
-    const response = await apiClient.get<ApplicationResponse>(
-      `/partner/applications/${encodeURIComponent(applicationId)}`,
-    );
+    const response =
+      await apiClient.get<ApplicationResponse>(
+        `/partner/applications/${encodeURIComponent(
+          applicationId,
+        )}`,
+      );
 
     return response.data;
   },
 
-  /**
-   * Start application review.
-   */
-  startReview: async (applicationId: string) => {
+  startReview: async (
+    applicationId: string,
+  ) => {
     const response = await apiClient.post(
-      `/partner/applications/${encodeURIComponent(applicationId)}/start-review`,
+      `/partner/applications/${encodeURIComponent(
+        applicationId,
+      )}/start-review`,
     );
 
     return response.data;
   },
 
-  /**
-   * Approve application.
-   */
-  approveApplication: async (applicationId: string) => {
+  approveApplication: async (
+    applicationId: string,
+  ) => {
     const response = await apiClient.post(
-      `/partner/applications/${encodeURIComponent(applicationId)}/approve`,
+      `/partner/applications/${encodeURIComponent(
+        applicationId,
+      )}/approve`,
     );
 
     return response.data;
   },
 
-  /**
-   * Reject application.
-   */
+  checkApprovalReadiness: async (
+    applicationId: string,
+  ) => {
+    const response = await apiClient.get(
+      `/partner/applications/${encodeURIComponent(
+        applicationId,
+      )}/approval-readiness`,
+    );
+
+    return response.data;
+  },
+
+  reviewDocument: async (
+    applicationId: string,
+    documentId: string,
+    payload: {
+      verification_status:
+        | "VERIFIED"
+        | "REJECTED";
+      reason?: string;
+    },
+  ) => {
+    const response = await apiClient.post(
+      `/partner/applications/${encodeURIComponent(
+        applicationId,
+      )}/documents/${encodeURIComponent(
+        documentId,
+      )}/review`,
+      payload,
+    );
+
+    return response.data;
+  },
+
+  addReviewNote: async (
+    applicationId: string,
+    content: string,
+  ) => {
+    const response = await apiClient.post(
+      `/partner/applications/${encodeURIComponent(
+        applicationId,
+      )}/notes`,
+      {
+        content,
+      },
+    );
+
+    return response.data;
+  },
+
+  processReviewDecision: async (
+    applicationId: string,
+    payload: {
+      decision: "APPROVED" | "REJECTED";
+      reason?: string;
+    },
+  ) => {
+    const response =
+      await apiClient.post<ApplicationResponse>(
+        `/partner/applications/${encodeURIComponent(
+          applicationId,
+        )}/review`,
+        payload,
+      );
+
+    return response.data;
+  },
+
+  requestCorrection: async (
+    applicationId: string,
+    payload: {
+      reason: string;
+      correction_fields?: string[];
+    },
+  ) => {
+    const response =
+      await apiClient.post<ApplicationResponse>(
+        `/partner/applications/${encodeURIComponent(
+          applicationId,
+        )}/request-correction`,
+        payload,
+      );
+
+    return response.data;
+  },
+
+  completeApplication: async (
+    applicationId: string,
+    notes?: string,
+  ): Promise<ApplicationResponse> => {
+    const response =
+      await apiClient.post<ApplicationResponse>(
+        `/partner/applications/${encodeURIComponent(
+          applicationId,
+        )}/complete`,
+        null,
+        {
+          params: {
+            notes,
+          },
+        },
+      );
+
+    return response.data;
+  },
+
   rejectApplication: async (
     applicationId: string,
     reason: string,
-  ) => {
-    const response = await apiClient.post(
-      `/partner/applications/${encodeURIComponent(applicationId)}/reject`,
-      {
-        decision: "REJECTED",
-        reason,
-      },
-    );
+  ): Promise<ApplicationResponse> => {
+    const response =
+      await apiClient.post<ApplicationResponse>(
+        `/partner/applications/${encodeURIComponent(
+          applicationId,
+        )}/reject`,
+        {
+          decision: "REJECTED",
+          reason,
+        },
+      );
 
     return response.data;
   },

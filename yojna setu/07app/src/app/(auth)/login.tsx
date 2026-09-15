@@ -11,9 +11,7 @@ import {
   View,
 } from "react-native";
 import { Link, router } from "expo-router";
-import {
-  Ionicons,
-} from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 import Screen from "../../components/Screen";
 import theme from "../../constants/theme";
@@ -22,26 +20,19 @@ import { useAuth } from "../../context/AuthContext";
 export default function LoginScreen() {
   const { login } = useAuth();
 
-  const [username, setUsername] =
-    useState("");
+  const [username, setUsername] = useState("");
 
-  const [password, setPassword] =
-    useState("");
+  const [password, setPassword] = useState("");
 
-  const [isSubmitting, setIsSubmitting] =
-    useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [errorMsg, setErrorMsg] =
-    useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const [showPassword, setShowPassword] =
-    useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async () => {
     if (!username.trim() || !password) {
-      setErrorMsg(
-        "Please provide both email/phone and password."
-      );
+      setErrorMsg("Please provide both email/phone and password.");
       return;
     }
 
@@ -54,55 +45,31 @@ export default function LoginScreen() {
         password,
       });
 
-      const userRole =
-        loginResponse?.user?.role;
+      const userRole = loginResponse?.user?.role;
 
       if (userRole === "SYSTEM_ADMIN") {
         router.replace("/admin");
       } else {
-        router.replace("/(tabs)");
+        router.replace("/(tabs)/home");
       }
     } catch (error: any) {
-      let detail =
-        "Invalid email/phone or password.";
+      let detail = "Invalid email/phone or password.";
 
       if (!error?.response) {
-        detail =
-          "Unable to connect to YojnaSetu server. Please try again.";
-      } else if (
-        error.response.status === 401
-      ) {
-        detail =
-          "Invalid email/phone or password.";
-      } else if (
-        error.response.status === 403
-      ) {
-        detail =
-          "User account is deactivated.";
-      } else if (
-        typeof error.response?.data
-          ?.detail === "string"
-      ) {
-        detail =
-          error.response.data.detail;
-      } else if (
-        Array.isArray(
-          error.response?.data?.detail
-        )
-      ) {
-        detail =
-          error.response.data.detail
-            .map(
-              (item: any) =>
-                item?.msg || item?.message
-            )
-            .filter(Boolean)
-            .join(", ");
-      } else if (
-        error?.userFriendlyMessage
-      ) {
-        detail =
-          error.userFriendlyMessage;
+        detail = "Unable to connect to YojnaSetu server. Please try again.";
+      } else if (error.response.status === 401) {
+        detail = "Invalid email/phone or password.";
+      } else if (error.response.status === 403) {
+        detail = "User account is deactivated.";
+      } else if (typeof error.response?.data?.detail === "string") {
+        detail = error.response.data.detail;
+      } else if (Array.isArray(error.response?.data?.detail)) {
+        detail = error.response.data.detail
+          .map((item: any) => item?.msg || item?.message)
+          .filter(Boolean)
+          .join(", ");
+      } else if (error?.userFriendlyMessage) {
+        detail = error.userFriendlyMessage;
       }
 
       setErrorMsg(detail);
@@ -115,16 +82,10 @@ export default function LoginScreen() {
     <Screen scrollable>
       <KeyboardAvoidingView
         style={styles.keyboard}
-        behavior={
-          Platform.OS === "ios"
-            ? "padding"
-            : undefined
-        }
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <ScrollView
-          contentContainerStyle={
-            styles.scrollContent
-          }
+          contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
@@ -132,16 +93,10 @@ export default function LoginScreen() {
             {/* Brand */}
             <View style={styles.brandSection}>
               <View style={styles.logo}>
-                <Ionicons
-                  name="git-network"
-                  size={30}
-                  color="#FFFFFF"
-                />
+                <Ionicons name="git-network" size={30} color="#FFFFFF" />
               </View>
 
-              <Text style={styles.brandName}>
-                YojnaSetu
-              </Text>
+              <Text style={styles.brandName}>YojnaSetu</Text>
 
               <Text style={styles.subtitle}>
                 Your gateway to government schemes
@@ -150,9 +105,7 @@ export default function LoginScreen() {
 
             {/* Card */}
             <View style={styles.card}>
-              <Text style={styles.title}>
-                Welcome Back
-              </Text>
+              <Text style={styles.title}>Welcome Back</Text>
 
               <Text style={styles.description}>
                 Sign in to continue to YojnaSetu
@@ -160,42 +113,28 @@ export default function LoginScreen() {
 
               {/* Error */}
               {errorMsg && (
-                <View
-                  style={styles.errorContainer}
-                >
+                <View style={styles.errorContainer}>
                   <Ionicons
                     name="alert-circle-outline"
                     size={21}
                     color="#B42318"
                   />
 
-                  <Text
-                    style={styles.errorText}
-                  >
-                    {errorMsg}
-                  </Text>
+                  <Text style={styles.errorText}>{errorMsg}</Text>
                 </View>
               )}
 
               {/* Email / Phone */}
               <View style={styles.field}>
-                <Text style={styles.label}>
-                  Email / Phone
-                </Text>
+                <Text style={styles.label}>Email / Phone</Text>
 
                 <View
                   style={[
                     styles.inputWrapper,
-                    errorMsg
-                      ? styles.inputWrapperNormal
-                      : null,
+                    errorMsg ? styles.inputWrapperNormal : null,
                   ]}
                 >
-                  <Ionicons
-                    name="person-outline"
-                    size={20}
-                    color="#667085"
-                  />
+                  <Ionicons name="person-outline" size={20} color="#667085" />
 
                   <TextInput
                     value={username}
@@ -215,9 +154,7 @@ export default function LoginScreen() {
               {/* Password */}
               <View style={styles.field}>
                 <View style={styles.labelRow}>
-                  <Text style={styles.label}>
-                    Password
-                  </Text>
+                  <Text style={styles.label}>Password</Text>
                 </View>
 
                 <View style={styles.inputWrapper}>
@@ -232,40 +169,25 @@ export default function LoginScreen() {
                     onChangeText={setPassword}
                     placeholder="Enter your password"
                     placeholderTextColor="#98A2B3"
-                    secureTextEntry={
-                      !showPassword
-                    }
+                    secureTextEntry={!showPassword}
                     autoCapitalize="none"
                     autoCorrect={false}
                     returnKeyType="done"
-                    onSubmitEditing={
-                      handleSubmit
-                    }
+                    onSubmitEditing={handleSubmit}
                     style={styles.input}
                     editable={!isSubmitting}
                   />
 
                   <Pressable
-                    onPress={() =>
-                      setShowPassword(
-                        (current) =>
-                          !current
-                      )
-                    }
+                    onPress={() => setShowPassword((current) => !current)}
                     hitSlop={10}
                     accessibilityRole="button"
                     accessibilityLabel={
-                      showPassword
-                        ? "Hide password"
-                        : "Show password"
+                      showPassword ? "Hide password" : "Show password"
                     }
                   >
                     <Ionicons
-                      name={
-                        showPassword
-                          ? "eye-off-outline"
-                          : "eye-outline"
-                      }
+                      name={showPassword ? "eye-off-outline" : "eye-outline"}
                       size={21}
                       color="#667085"
                     />
@@ -279,54 +201,30 @@ export default function LoginScreen() {
                 disabled={isSubmitting}
                 style={({ pressed }) => [
                   styles.loginButton,
-                  pressed &&
-                    !isSubmitting &&
-                    styles.buttonPressed,
-                  isSubmitting &&
-                    styles.buttonDisabled,
+                  pressed && !isSubmitting && styles.buttonPressed,
+                  isSubmitting && styles.buttonDisabled,
                 ]}
                 accessibilityRole="button"
                 accessibilityLabel="Sign in"
               >
                 {isSubmitting ? (
-                  <ActivityIndicator
-                    color="#FFFFFF"
-                    size="small"
-                  />
+                  <ActivityIndicator color="#FFFFFF" size="small" />
                 ) : (
                   <>
-                    <Ionicons
-                      name="log-in-outline"
-                      size={21}
-                      color="#FFFFFF"
-                    />
+                    <Ionicons name="log-in-outline" size={21} color="#FFFFFF" />
 
-                    <Text
-                      style={
-                        styles.loginButtonText
-                      }
-                    >
-                      Sign In
-                    </Text>
+                    <Text style={styles.loginButtonText}>Sign In</Text>
                   </>
                 )}
               </Pressable>
 
               {/* Divider */}
               <View style={styles.dividerRow}>
-                <View
-                  style={styles.divider}
-                />
+                <View style={styles.divider} />
 
-                <Text
-                  style={styles.dividerText}
-                >
-                  OR
-                </Text>
+                <Text style={styles.dividerText}>OR</Text>
 
-                <View
-                  style={styles.divider}
-                />
+                <View style={styles.divider} />
               </View>
 
               {/* Google placeholder */}
@@ -336,55 +234,27 @@ export default function LoginScreen() {
                 accessibilityRole="button"
                 accessibilityLabel="Continue with Google"
               >
-                <View
-                  style={styles.googleIcon}
-                >
-                  <Text
-                    style={styles.googleG}
-                  >
-                    G
-                  </Text>
+                <View style={styles.googleIcon}>
+                  <Text style={styles.googleG}>G</Text>
                 </View>
 
-                <Text
-                  style={
-                    styles.googleButtonText
-                  }
-                >
+                <Text style={styles.googleButtonText}>
                   Continue with Google
                 </Text>
               </Pressable>
 
               <Text style={styles.googleNote}>
-                Google sign-in will be enabled
-                when native Google authentication
+                Google sign-in will be enabled when native Google authentication
                 is configured.
               </Text>
 
               {/* Register */}
-              <View
-                style={styles.registerRow}
-              >
-                <Text
-                  style={styles.registerText}
-                >
-                  Don't have an account?
-                </Text>
+              <View style={styles.registerRow}>
+                <Text style={styles.registerText}>Don't have an account?</Text>
 
-                <Link
-                  href="/(auth)/register"
-                  asChild
-                >
-                  <Pressable
-                    disabled={isSubmitting}
-                  >
-                    <Text
-                      style={
-                        styles.registerLink
-                      }
-                    >
-                      Create an account
-                    </Text>
+                <Link href="/(auth)/register" asChild>
+                  <Pressable disabled={isSubmitting}>
+                    <Text style={styles.registerLink}>Create an account</Text>
                   </Pressable>
                 </Link>
               </View>
@@ -392,8 +262,7 @@ export default function LoginScreen() {
 
             {/* Footer */}
             <Text style={styles.footerText}>
-              Secure access to government
-              welfare schemes
+              Secure access to government welfare schemes
             </Text>
           </View>
         </ScrollView>
@@ -467,15 +336,13 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color:
-      theme.colors?.text || "#101828",
+    color: theme.colors?.text || "#101828",
     fontSize: 25,
     fontWeight: "800",
   },
 
   description: {
-    color:
-      theme.colors?.textSoft || "#667085",
+    color: theme.colors?.textSoft || "#667085",
     fontSize: 14,
     marginTop: 6,
     marginBottom: 22,
@@ -544,8 +411,7 @@ const styles = StyleSheet.create({
   loginButton: {
     minHeight: 52,
     borderRadius: 12,
-    backgroundColor:
-      theme.colors?.primary || "#0E766E",
+    backgroundColor: theme.colors?.primary || "#0E766E",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -643,8 +509,7 @@ const styles = StyleSheet.create({
   },
 
   registerLink: {
-    color:
-      theme.colors?.primary || "#0E766E",
+    color: theme.colors?.primary || "#0E766E",
     fontSize: 14,
     fontWeight: "800",
   },

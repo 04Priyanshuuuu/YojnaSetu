@@ -1,8 +1,10 @@
 import { apiClient } from './client';
+
 import {
   FilterOptionsResponse,
   PaginatedSchemeListResponse,
   Scheme,
+  SchemeComparisonResponse,
 } from '../types';
 
 export interface SchemeQueryParams {
@@ -41,15 +43,22 @@ export const schemeApi = {
     return response.data;
   },
 
-  getComparison: async (schemeIds: string[]) => {
-  const response = await apiClient.get("/schemes/compare", {
-    params: {
-      schemes: schemeIds.join(","),
-    },
-  });
+  getComparison: async (
+    schemeIds: string[]
+  ): Promise<SchemeComparisonResponse> => {
+    const idsParam = schemeIds.join(',');
 
-  return response.data;
-},
+    const response = await apiClient.get<SchemeComparisonResponse>(
+      '/schemes/compare',
+      {
+        params: {
+          ids: idsParam,
+        },
+      }
+    );
+
+    return response.data;
+  },
 
   getFilterOptions: async (): Promise<FilterOptionsResponse> => {
     const response = await apiClient.get<FilterOptionsResponse>(
@@ -61,6 +70,27 @@ export const schemeApi = {
 
   getSchemeById: async (schemeId: string): Promise<Scheme> => {
     const response = await apiClient.get<Scheme>(`/schemes/${schemeId}`);
+
+    return response.data;
+  },
+
+  emailScheme: async (
+    schemeId: string,
+    recipientEmail: string,
+    languageCode?: string
+  ): Promise<{
+    sent: boolean;
+    message: string;
+    recipient_email?: string;
+  }> => {
+    const response = await apiClient.post<{
+      sent: boolean;
+      message: string;
+      recipient_email?: string;
+    }>(`/schemes/${schemeId}/email`, {
+      recipient_email: recipientEmail,
+      language_code: languageCode || 'en',
+    });
 
     return response.data;
   },

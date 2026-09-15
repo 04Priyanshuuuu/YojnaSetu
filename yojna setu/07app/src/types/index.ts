@@ -1,3 +1,41 @@
+import type { ApplicationStatusHistoryItem } from "./application";
+
+export interface SchemeRule {
+  rule_id: string;
+  scheme_id: string;
+  field: string;
+  operator: string;
+  value: string;
+  value_type: string;
+  rule_type: string;
+  priority: number;
+  condition_group?: string | null;
+  error_message?: string | null;
+  description?: string | null;
+}
+
+export interface SchemeDocument {
+  document_id: string;
+  scheme_id: string;
+  document_name: string;
+  requirement_type: string;
+  condition?: string | null;
+  applicant_type?: string | null;
+  source_document?: string | null;
+  source_page?: string | null;
+  source_section?: string | null;
+  active: boolean;
+}
+
+export interface SchemeVerification {
+  verification_id: string;
+  scheme_id: string;
+  source_name: string;
+  source_url?: string | null;
+  verified_by?: string | null;
+  status: string;
+}
+
 export interface Scheme {
   scheme_id: string;
   scheme_name: string;
@@ -53,6 +91,7 @@ export interface Scheme {
   grant_amount?: number | null;
   repayment_period_max_months?: number | null;
   verification_status: string;
+  documents?: SchemeDocument[];
 }
 
 export interface PaginatedSchemeListResponse {
@@ -79,7 +118,6 @@ export interface FilterOptionsResponse {
   total_schemes: number;
 }
 
-
 export type {
   BeneficiaryProfileInput,
   ApplicationDocument,
@@ -87,9 +125,23 @@ export type {
   ApplicationResponse,
   PaginatedApplicationListResponse,
   SubmissionValidationResponse,
-} from './application';
+} from "./application";
 
+export type ApplicationStatus = string;
 
+export type StatusHistory = ApplicationStatusHistoryItem & {
+  new_status?: string | null;
+  created_at?: string | null;
+};
+
+export interface ScoreDimensionBreakdown {
+  dimension: string;
+  result: "MATCH" | "NO_MATCH" | "PARTIAL_MATCH" | "NOT_EVALUATED" | string;
+  reason?: string;
+  score: number;
+  max_weight: number;
+  [key: string]: unknown;
+}
 
 export interface NotificationItem {
   notification_id: string;
@@ -136,3 +188,18 @@ export interface NotificationPreference {
   updated_at?: string | null;
 }
 
+export interface SchemePersonalizedEligibility {
+  status: "ELIGIBLE" | "INSUFFICIENT_INFORMATION" | "INELIGIBLE";
+  reasons: string[];
+  missing_fields: string[];
+}
+
+export interface SchemeComparisonItem {
+  scheme: Scheme;
+  personalized_eligibility?: SchemePersonalizedEligibility | null;
+}
+
+export interface SchemeComparisonResponse {
+  compared_schemes: SchemeComparisonItem[];
+  invalid_ids: string[];
+}

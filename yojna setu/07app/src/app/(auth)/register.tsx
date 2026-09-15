@@ -24,27 +24,20 @@ export default function RegisterScreen() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
 
-  const [isSubmitting, setIsSubmitting] =
-    useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [errorMsg, setErrorMsg] =
-    useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const [showPassword, setShowPassword] =
-    useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async () => {
     if (!email.trim() && !phone.trim()) {
-      setErrorMsg(
-        "Please provide either an email address or phone number."
-      );
+      setErrorMsg("Please provide either an email address or phone number.");
       return;
     }
 
     if (!password || password.length < 8) {
-      setErrorMsg(
-        "Password must be at least 8 characters long."
-      );
+      setErrorMsg("Password must be at least 8 characters long.");
       return;
     }
 
@@ -53,49 +46,29 @@ export default function RegisterScreen() {
 
     try {
       await register({
-        email: email.trim()
-          ? email.trim()
-          : undefined,
-        phone: phone.trim()
-          ? phone.trim()
-          : undefined,
+        email: email.trim() ? email.trim() : undefined,
+        phone: phone.trim() ? phone.trim() : undefined,
         password,
       });
 
       // The mobile AuthContext automatically logs
       // the newly registered user in.
-      router.replace("/(tabs)");
+      router.replace("/(tabs)/home");
     } catch (error: any) {
       let detail =
         "Registration failed. User with this email/phone may already exist.";
 
       if (!error?.response) {
-        detail =
-          "Unable to connect to YojnaSetu server. Please try again.";
-      } else if (
-        typeof error.response?.data?.detail ===
-        "string"
-      ) {
-        detail =
-          error.response.data.detail;
-      } else if (
-        Array.isArray(
-          error.response?.data?.detail
-        )
-      ) {
-        detail =
-          error.response.data.detail
-            .map(
-              (item: any) =>
-                item?.msg || item?.message
-            )
-            .filter(Boolean)
-            .join(", ");
-      } else if (
-        error?.userFriendlyMessage
-      ) {
-        detail =
-          error.userFriendlyMessage;
+        detail = "Unable to connect to YojnaSetu server. Please try again.";
+      } else if (typeof error.response?.data?.detail === "string") {
+        detail = error.response.data.detail;
+      } else if (Array.isArray(error.response?.data?.detail)) {
+        detail = error.response.data.detail
+          .map((item: any) => item?.msg || item?.message)
+          .filter(Boolean)
+          .join(", ");
+      } else if (error?.userFriendlyMessage) {
+        detail = error.userFriendlyMessage;
       }
 
       setErrorMsg(detail);
@@ -108,16 +81,10 @@ export default function RegisterScreen() {
     <Screen scrollable>
       <KeyboardAvoidingView
         style={styles.keyboard}
-        behavior={
-          Platform.OS === "ios"
-            ? "padding"
-            : undefined
-        }
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <ScrollView
-          contentContainerStyle={
-            styles.scrollContent
-          }
+          contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
@@ -125,67 +92,43 @@ export default function RegisterScreen() {
             {/* Brand */}
             <View style={styles.brandSection}>
               <View style={styles.logo}>
-                <Ionicons
-                  name="git-network"
-                  size={30}
-                  color="#FFFFFF"
-                />
+                <Ionicons name="git-network" size={30} color="#FFFFFF" />
               </View>
 
-              <Text style={styles.brandName}>
-                YojnaSetu
-              </Text>
+              <Text style={styles.brandName}>YojnaSetu</Text>
 
               <Text style={styles.subtitle}>
-                Create your account to access
-                government schemes
+                Create your account to access government schemes
               </Text>
             </View>
 
             {/* Registration Card */}
             <View style={styles.card}>
-              <Text style={styles.title}>
-                Create Account
-              </Text>
+              <Text style={styles.title}>Create Account</Text>
 
               <Text style={styles.description}>
-                Register to get started with
-                YojnaSetu
+                Register to get started with YojnaSetu
               </Text>
 
               {/* Error */}
               {errorMsg && (
-                <View
-                  style={styles.errorContainer}
-                >
+                <View style={styles.errorContainer}>
                   <Ionicons
                     name="alert-circle-outline"
                     size={21}
                     color="#B42318"
                   />
 
-                  <Text
-                    style={styles.errorText}
-                  >
-                    {errorMsg}
-                  </Text>
+                  <Text style={styles.errorText}>{errorMsg}</Text>
                 </View>
               )}
 
               {/* Email */}
               <View style={styles.field}>
-                <Text style={styles.label}>
-                  Email Address
-                </Text>
+                <Text style={styles.label}>Email Address</Text>
 
-                <View
-                  style={styles.inputWrapper}
-                >
-                  <Ionicons
-                    name="mail-outline"
-                    size={20}
-                    color="#667085"
-                  />
+                <View style={styles.inputWrapper}>
+                  <Ionicons name="mail-outline" size={20} color="#667085" />
 
                   <TextInput
                     value={email}
@@ -204,18 +147,10 @@ export default function RegisterScreen() {
 
               {/* Phone */}
               <View style={styles.field}>
-                <Text style={styles.label}>
-                  Phone Number
-                </Text>
+                <Text style={styles.label}>Phone Number</Text>
 
-                <View
-                  style={styles.inputWrapper}
-                >
-                  <Ionicons
-                    name="call-outline"
-                    size={20}
-                    color="#667085"
-                  />
+                <View style={styles.inputWrapper}>
+                  <Ionicons name="call-outline" size={20} color="#667085" />
 
                   <TextInput
                     value={phone}
@@ -232,19 +167,14 @@ export default function RegisterScreen() {
 
               {/* Helper text */}
               <Text style={styles.helperText}>
-                Provide at least one: email or
-                phone number.
+                Provide at least one: email or phone number.
               </Text>
 
               {/* Password */}
               <View style={styles.field}>
-                <Text style={styles.label}>
-                  Password
-                </Text>
+                <Text style={styles.label}>Password</Text>
 
-                <View
-                  style={styles.inputWrapper}
-                >
+                <View style={styles.inputWrapper}>
                   <Ionicons
                     name="lock-closed-outline"
                     size={20}
@@ -256,40 +186,25 @@ export default function RegisterScreen() {
                     onChangeText={setPassword}
                     placeholder="••••••••"
                     placeholderTextColor="#98A2B3"
-                    secureTextEntry={
-                      !showPassword
-                    }
+                    secureTextEntry={!showPassword}
                     autoCapitalize="none"
                     autoCorrect={false}
                     returnKeyType="done"
-                    onSubmitEditing={
-                      handleSubmit
-                    }
+                    onSubmitEditing={handleSubmit}
                     style={styles.input}
                     editable={!isSubmitting}
                   />
 
                   <Pressable
-                    onPress={() =>
-                      setShowPassword(
-                        (current) =>
-                          !current
-                      )
-                    }
+                    onPress={() => setShowPassword((current) => !current)}
                     hitSlop={10}
                     accessibilityRole="button"
                     accessibilityLabel={
-                      showPassword
-                        ? "Hide password"
-                        : "Show password"
+                      showPassword ? "Hide password" : "Show password"
                     }
                   >
                     <Ionicons
-                      name={
-                        showPassword
-                          ? "eye-off-outline"
-                          : "eye-outline"
-                      }
+                      name={showPassword ? "eye-off-outline" : "eye-outline"}
                       size={21}
                       color="#667085"
                     />
@@ -297,8 +212,7 @@ export default function RegisterScreen() {
                 </View>
 
                 <Text style={styles.passwordHint}>
-                  Password must be at least 8
-                  characters long.
+                  Password must be at least 8 characters long.
                 </Text>
               </View>
 
@@ -308,20 +222,14 @@ export default function RegisterScreen() {
                 disabled={isSubmitting}
                 style={({ pressed }) => [
                   styles.registerButton,
-                  pressed &&
-                    !isSubmitting &&
-                    styles.buttonPressed,
-                  isSubmitting &&
-                    styles.buttonDisabled,
+                  pressed && !isSubmitting && styles.buttonPressed,
+                  isSubmitting && styles.buttonDisabled,
                 ]}
                 accessibilityRole="button"
                 accessibilityLabel="Create account"
               >
                 {isSubmitting ? (
-                  <ActivityIndicator
-                    color="#FFFFFF"
-                    size="small"
-                  />
+                  <ActivityIndicator color="#FFFFFF" size="small" />
                 ) : (
                   <>
                     <Ionicons
@@ -330,11 +238,7 @@ export default function RegisterScreen() {
                       color="#FFFFFF"
                     />
 
-                    <Text
-                      style={
-                        styles.registerButtonText
-                      }
-                    >
+                    <Text style={styles.registerButtonText}>
                       Create Account
                     </Text>
                   </>
@@ -343,19 +247,11 @@ export default function RegisterScreen() {
 
               {/* Divider */}
               <View style={styles.dividerRow}>
-                <View
-                  style={styles.divider}
-                />
+                <View style={styles.divider} />
 
-                <Text
-                  style={styles.dividerText}
-                >
-                  OR
-                </Text>
+                <Text style={styles.dividerText}>OR</Text>
 
-                <View
-                  style={styles.divider}
-                />
+                <View style={styles.divider} />
               </View>
 
               {/* Google */}
@@ -365,53 +261,27 @@ export default function RegisterScreen() {
                 accessibilityRole="button"
                 accessibilityLabel="Continue with Google"
               >
-                <View
-                  style={styles.googleIcon}
-                >
-                  <Text
-                    style={styles.googleG}
-                  >
-                    G
-                  </Text>
+                <View style={styles.googleIcon}>
+                  <Text style={styles.googleG}>G</Text>
                 </View>
 
-                <Text
-                  style={
-                    styles.googleButtonText
-                  }
-                >
+                <Text style={styles.googleButtonText}>
                   Continue with Google
                 </Text>
               </Pressable>
 
               <Text style={styles.googleNote}>
-                Google sign-up will be enabled
-                when native Google authentication
+                Google sign-up will be enabled when native Google authentication
                 is configured.
               </Text>
 
               {/* Login */}
-              <View
-                style={styles.loginRow}
-              >
-                <Text
-                  style={styles.loginText}
-                >
-                  Already have an account?
-                </Text>
+              <View style={styles.loginRow}>
+                <Text style={styles.loginText}>Already have an account?</Text>
 
-                <Link
-                  href="/(auth)/login"
-                  asChild
-                >
-                  <Pressable
-                    disabled={isSubmitting}
-                  >
-                    <Text
-                      style={styles.loginLink}
-                    >
-                      Sign In
-                    </Text>
+                <Link href="/(auth)/login" asChild>
+                  <Pressable disabled={isSubmitting}>
+                    <Text style={styles.loginLink}>Sign In</Text>
                   </Pressable>
                 </Link>
               </View>
@@ -419,8 +289,7 @@ export default function RegisterScreen() {
 
             {/* Footer */}
             <Text style={styles.footerText}>
-              Secure registration for YojnaSetu
-              users
+              Secure registration for YojnaSetu users
             </Text>
           </View>
         </ScrollView>
@@ -496,15 +365,13 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color:
-      theme.colors?.text || "#101828",
+    color: theme.colors?.text || "#101828",
     fontSize: 25,
     fontWeight: "800",
   },
 
   description: {
-    color:
-      theme.colors?.textSoft || "#667085",
+    color: theme.colors?.textSoft || "#667085",
     fontSize: 14,
     marginTop: 6,
     marginBottom: 21,
@@ -577,8 +444,7 @@ const styles = StyleSheet.create({
   registerButton: {
     minHeight: 52,
     borderRadius: 12,
-    backgroundColor:
-      theme.colors?.primary || "#0E766E",
+    backgroundColor: theme.colors?.primary || "#0E766E",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -676,8 +542,7 @@ const styles = StyleSheet.create({
   },
 
   loginLink: {
-    color:
-      theme.colors?.primary || "#0E766E",
+    color: theme.colors?.primary || "#0E766E",
     fontSize: 14,
     fontWeight: "800",
   },
