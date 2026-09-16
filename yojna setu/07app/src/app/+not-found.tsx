@@ -1,12 +1,10 @@
 import React from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
-import { useTranslation } from "react-i18next";
 import { Home, Compass } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function NotFound() {
-  const { t } = useTranslation();
   const router = useRouter();
 
   return (
@@ -28,15 +26,10 @@ export default function NotFound() {
               <Text style={styles.badgeText}>404</Text>
             </View>
 
-            <Text style={styles.title}>
-              {t("errors.pageNotFound", "Page Not Found")}
-            </Text>
+            <Text style={styles.title}>Page Not Found</Text>
 
             <Text style={styles.description}>
-              {t(
-                "errors.pageNotFoundDesc",
-                "The page you are looking for does not exist or has been moved.",
-              )}
+              The page you are looking for does not exist or has been moved.
             </Text>
           </View>
 
@@ -48,11 +41,11 @@ export default function NotFound() {
                 styles.homeButton,
                 pressed && styles.buttonPressed,
               ]}
-              onPress={() => router.push("/")}
+              onPress={() => router.push("/(tabs)/home")}
             >
               <Home size={16} color="#ffffff" strokeWidth={2.5} />
 
-              <Text style={styles.homeButtonText}>{t("nav.home", "Home")}</Text>
+              <Text style={styles.homeButtonText}>Home</Text>
             </Pressable>
 
             {/* Explore Schemes Button */}
@@ -65,9 +58,7 @@ export default function NotFound() {
             >
               <Compass size={16} color="#0369a1" strokeWidth={2.5} />
 
-              <Text style={styles.schemesButtonText}>
-                {t("nav.schemes", "Explore Schemes")}
-              </Text>
+              <Text style={styles.schemesButtonText}>Explore Schemes</Text>
             </Pressable>
           </View>
         </View>
