@@ -1,8 +1,6 @@
-import { apiClient } from './client';
+import { apiClient } from "./client";
 
-import {
-  BeneficiaryProfileInput,
-} from './recommendationApi';
+import { BeneficiaryProfileInput } from "./recommendationApi";
 
 export interface NaturalLanguageExtractResponse {
   extracted_profile: BeneficiaryProfileInput;
@@ -26,18 +24,17 @@ export const aiApi = {
    * into a structured beneficiary profile.
    *
    * Backend contract:
-   * POST /profile/extract
+   * POST /ai/profile/extract
    */
   extractProfile: async (
-    userText: string
+    userText: string,
   ): Promise<NaturalLanguageExtractResponse> => {
-    const response =
-      await apiClient.post<NaturalLanguageExtractResponse>(
-        '/profile/extract',
-        {
-          text: userText,
-        }
-      );
+    const response = await apiClient.post<NaturalLanguageExtractResponse>(
+      "/ai/profile/extract",
+      {
+        user_text: userText,
+      },
+    );
 
     return response.data;
   },
@@ -46,17 +43,16 @@ export const aiApi = {
    * AI-enhanced recommendation explanation.
    *
    * This is kept separate from the deterministic recommendation
-   * engine. The deterministic /recommend endpoint remains the
+   * engine. The deterministic /recommendations endpoint remains the
    * primary eligibility source.
    */
   getAIRecommendations: async (
-    payload: AIRecommendationRequest
+    payload: AIRecommendationRequest,
   ): Promise<AIExplainableRecommendationResponse> => {
-    const response =
-      await apiClient.post<AIExplainableRecommendationResponse>(
-        '/recommend/ai',
-        payload
-      );
+    const response = await apiClient.post<AIExplainableRecommendationResponse>(
+      "/ai/recommend",
+      payload,
+    );
 
     return response.data;
   },

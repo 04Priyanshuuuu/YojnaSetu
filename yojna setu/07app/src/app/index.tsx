@@ -3,6 +3,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
 
 import { useAuth } from "../context/AuthContext";
+import YojnaSetuLogo from "../components/branding/YojnaSetuLogo";
 
 export default function StartupScreen() {
   const { isLoading, isReady, isAuthenticated } = useAuth();
@@ -15,9 +16,7 @@ export default function StartupScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.logoWrap}>
-        <Text style={styles.logoText}>Y</Text>
-      </View>
+      <YojnaSetuLogo size={128} style={styles.logo} />
 
       <Text style={styles.appName}>YojnaSetu</Text>
       <Text style={styles.tagline}>Government schemes, simplified</Text>
@@ -34,24 +33,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#F2FDFB",
     paddingHorizontal: 24,
   },
-  logoWrap: {
-    width: 92,
-    height: 92,
-    borderRadius: 24,
-    backgroundColor: "#0E766E",
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#0E766E",
-    shadowOpacity: 0.22,
-    shadowRadius: 18,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 8,
-  },
-  logoText: {
-    color: "#FFFFFF",
-    fontSize: 42,
-    fontWeight: "800",
-    lineHeight: 42,
+  logo: {
+    marginBottom: 2,
   },
   appName: {
     marginTop: 18,

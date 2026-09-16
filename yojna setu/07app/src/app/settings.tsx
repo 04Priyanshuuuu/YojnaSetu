@@ -6,6 +6,7 @@ import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 
 import { useAuth } from "../context/AuthContext";
+import AppHeader from "../components/AppHeader";
 
 type SettingRow = {
   title: string;
@@ -127,11 +128,7 @@ export default function SettingsScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>
-          {t("settings.title", "Settings")}
-        </Text>
-      </View>
+      <AppHeader title={t("settings.title", "Settings")} />
 
       <ScrollView
         style={styles.container}

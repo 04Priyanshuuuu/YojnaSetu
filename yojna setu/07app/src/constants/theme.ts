@@ -1,48 +1,48 @@
 export const colors = {
-  background: '#FEF9F3',
-  surface: '#FFFFFF',
+  background: "#FEF9F3",
+  surface: "#FFFFFF",
 
-  text: '#0F172A',
-  textSecondary: '#475569',
-  textMuted: '#64748B',
+  text: "#0F172A",
+  textSecondary: "#475569",
+  textMuted: "#64748B",
 
-  primary: '#2563EB',
-  muted: '#64748B',
-  textSoft: '#64748B',
+  primary: "#861823",
+  muted: "#64748B",
+  textSoft: "#64748B",
 
-  border: '#E2E8F0',
+  border: "#E2E8F0",
 
-  saffron: '#D7832D',
-  saffronDark: '#B96516',
-  saffronLight: '#FFF7ED',
+  saffron: "#D7832D",
+  saffronDark: "#B96516",
+  saffronLight: "#FFF7ED",
 
-  maroon: '#861823',
-  maroonDark: '#4F0E16',
+  maroon: "#861823",
+  maroonDark: "#4F0E16",
 
-  blue: '#2563EB',
-  blueDark: '#1E3A8A',
-  blueLight: '#EFF6FF',
+  blue: "#2563EB",
+  blueDark: "#1E3A8A",
+  blueLight: "#EFF6FF",
 
-  sky: '#0284C7',
-  skyLight: '#F0F9FF',
+  sky: "#0284C7",
+  skyLight: "#F0F9FF",
 
-  emerald: '#059669',
-  emeraldLight: '#ECFDF5',
+  emerald: "#059669",
+  emeraldLight: "#ECFDF5",
 
-  amber: '#D97706',
-  amberLight: '#FFFBEB',
+  amber: "#D97706",
+  amberLight: "#FFFBEB",
 
-  indigo: '#4F46E5',
-  indigoLight: '#EEF2FF',
+  indigo: "#4F46E5",
+  indigoLight: "#EEF2FF",
 
-  rose: '#E11D48',
-  roseLight: '#FFF1F2',
+  rose: "#E11D48",
+  roseLight: "#FFF1F2",
 
-  teal: '#0D9488',
-  tealLight: '#F0FDFA',
+  teal: "#0D9488",
+  tealLight: "#F0FDFA",
 
-  white: '#FFFFFF',
-  black: '#000000',
+  white: "#FFFFFF",
+  black: "#000000",
 };
 
 export const spacing = {
@@ -82,7 +82,7 @@ export const typography = {
 
 export const shadows = {
   card: {
-    shadowColor: '#000000',
+    shadowColor: "#000000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -93,7 +93,7 @@ export const shadows = {
   },
 
   elevated: {
-    shadowColor: '#000000',
+    shadowColor: "#000000",
     shadowOffset: {
       width: 0,
       height: 4,

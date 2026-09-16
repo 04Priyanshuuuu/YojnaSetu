@@ -16,6 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Screen from "../../components/Screen";
 import theme from "../../constants/theme";
 import { useAuth } from "../../context/AuthContext";
+import YojnaSetuLogo from "../../components/branding/YojnaSetuLogo";
 
 export default function LoginScreen() {
   const { login } = useAuth();
@@ -92,9 +93,7 @@ export default function LoginScreen() {
           <View style={styles.container}>
             {/* Brand */}
             <View style={styles.brandSection}>
-              <View style={styles.logo}>
-                <Ionicons name="git-network" size={30} color="#FFFFFF" />
-              </View>
+              <YojnaSetuLogo size={112} style={styles.logo} />
 
               <Text style={styles.brandName}>YojnaSetu</Text>
 
@@ -295,19 +294,13 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    width: 64,
-    height: 64,
-    borderRadius: 18,
-    backgroundColor: "#0E766E",
-    alignItems: "center",
-    justifyContent: "center",
     marginBottom: 12,
   },
 
   brandName: {
     fontSize: 27,
     fontWeight: "800",
-    color: "#0E766E",
+    color: "#861823",
     letterSpacing: -0.5,
   },
 
@@ -411,7 +404,7 @@ const styles = StyleSheet.create({
   loginButton: {
     minHeight: 52,
     borderRadius: 12,
-    backgroundColor: theme.colors?.primary || "#0E766E",
+    backgroundColor: theme.colors?.primary || "#861823",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -509,7 +502,7 @@ const styles = StyleSheet.create({
   },
 
   registerLink: {
-    color: theme.colors?.primary || "#0E766E",
+    color: theme.colors?.primary || "#861823",
     fontSize: 14,
     fontWeight: "800",
   },

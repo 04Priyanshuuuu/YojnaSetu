@@ -1,10 +1,10 @@
-import { apiClient } from './client';
+import { apiClient } from "./client";
 
 /**
  * Smart Match / Recommendation API
  *
  * Backend contract:
- * POST /recommend
+ * POST /recommendations
  *
  * The backend evaluates the supplied citizen profile against
  * the verified government schemes and returns ranked results.
@@ -37,12 +37,7 @@ export interface MissingFieldDetail {
 
 export interface ScoreBreakdownItem {
   dimension: string;
-  result:
-    | 'MATCH'
-    | 'NO_MATCH'
-    | 'PARTIAL_MATCH'
-    | 'NOT_EVALUATED'
-    | string;
+  result: "MATCH" | "NO_MATCH" | "PARTIAL_MATCH" | "NOT_EVALUATED" | string;
   reason?: string;
   score: number;
   max_weight: number;
@@ -55,11 +50,10 @@ export interface RecommendationItem {
 
   rank?: number;
   score?: number;
-
   eligibility_status:
-    | 'ELIGIBLE'
-    | 'INSUFFICIENT_INFORMATION'
-    | 'INELIGIBLE'
+    | "ELIGIBLE"
+    | "INSUFFICIENT_INFORMATION"
+    | "INELIGIBLE"
     | string;
 
   eligibility_reasons?: string[];
@@ -105,16 +99,15 @@ export interface RecommendationResponse {
 export const recommendationApi = {
   getRecommendations: async (
     profile: BeneficiaryProfileInput,
-    topK: number = 10
+    topK: number = 10,
   ): Promise<RecommendationResponse> => {
-    const response =
-      await apiClient.post<RecommendationResponse>(
-        '/recommend',
-        {
-          profile,
-          top_k: topK,
-        }
-      );
+    const response = await apiClient.post<RecommendationResponse>(
+      "/recommendations",
+      {
+        profile,
+        top_k: topK,
+      },
+    );
 
     return response.data;
   },

@@ -3,6 +3,7 @@ import { View, Text, Pressable, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { Home, Compass } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import YojnaSetuLogo from "../components/branding/YojnaSetuLogo";
 
 export default function NotFound() {
   const router = useRouter();
@@ -13,9 +14,7 @@ export default function NotFound() {
         <View style={styles.card}>
           {/* YojnaSetu Branding */}
           <View style={styles.brandContainer}>
-            <View style={styles.logo}>
-              <Text style={styles.logoText}>Y</Text>
-            </View>
+            <YojnaSetuLogo size={40} style={styles.logo} />
 
             <Text style={styles.brandText}>YojnaSetu</Text>
           </View>
@@ -114,18 +113,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 40,
     height: 40,
-    borderRadius: 8,
-    backgroundColor: "#020617",
-    borderWidth: 1,
-    borderColor: "#1e293b",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  logoText: {
-    color: "#ffffff",
-    fontSize: 18,
-    fontWeight: "800",
   },
 
   brandText: {

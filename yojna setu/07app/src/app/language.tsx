@@ -6,6 +6,7 @@ import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 
 import i18n, { SUPPORTED_LANGUAGES } from "../i18n";
+import AppHeader from "../components/AppHeader";
 
 export default function LanguageScreen() {
   const router = useRouter();
@@ -17,31 +18,13 @@ export default function LanguageScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
-      <View style={styles.header}>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={t("common.back", "Back")}
-          onPress={() => router.back()}
-          style={({ pressed }) => [
-            styles.backButton,
-            pressed && styles.pressed,
-          ]}
-        >
-          <Ionicons name="chevron-back" size={22} color="#091928" />
-        </Pressable>
-
-        <View style={styles.titleWrap}>
-          <Text style={styles.screenTitle}>{t("language", "Language")}</Text>
-          <Text style={styles.screenSubtitle}>
-            {t(
-              "language.chooseYourPreferredLanguage",
-              "Choose your preferred language",
-            )}
-          </Text>
-        </View>
-
-        <View style={styles.headerSpacer} />
-      </View>
+      <AppHeader
+        title={t("language", "Language")}
+        subtitle={t(
+          "language.chooseYourPreferredLanguage",
+          "Choose your preferred language",
+        )}
+      />
 
       <ScrollView
         style={styles.container}

@@ -17,6 +17,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 
 import { useAuth } from "../../context/AuthContext";
+import YojnaSetuLogo from "../branding/YojnaSetuLogo";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const DRAWER_WIDTH = Math.min(Math.max(SCREEN_WIDTH * 0.82, 280), 380);
@@ -318,7 +319,7 @@ export function AppDrawer({ visible, onClose, onOpen }: AppDrawerProps) {
         <View style={styles.header}>
           <View style={styles.brandRow}>
             <View style={styles.logoWrap}>
-              <Ionicons name="shield-checkmark" size={22} color="#B9E92F" />
+              <YojnaSetuLogo size={52} />
             </View>
 
             <View style={styles.brandTextWrap}>
@@ -590,14 +591,8 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   logoWrap: {
-    width: 42,
-    height: 42,
-    borderRadius: 12,
-    backgroundColor: "rgba(185, 233, 47, 0.18)",
-    borderWidth: 1,
-    borderColor: "rgba(185,233,47,0.4)",
-    alignItems: "center",
-    justifyContent: "center",
+    width: 52,
+    height: 52,
   },
   brandTextWrap: {
     flex: 1,

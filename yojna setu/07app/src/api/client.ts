@@ -3,21 +3,31 @@ import { getItem } from "../utils/storage";
 
 const ACCESS_TOKEN_KEY = "yojnasetu_access_token";
 
-/**
- * Expo environment variable:
- *
- * EXPO_PUBLIC_API_URL=http://YOUR_COMPUTER_IP:8000/api/v1
- *
- * Android Emulator fallback:
- * 10.0.2.2 points to the development computer's localhost.
- *
- * If your backend runs on another port, change the fallback below
- * or preferably define EXPO_PUBLIC_API_URL.
- */
-export const API_BASE_URL =
-  process.env.EXPO_PUBLIC_API_URL ||
-  process.env.EXPO_PUBLIC_API_BASE_URL ||
-  "http://10.0.2.2:8000/api/v1";
+const configuredApiUrl = process.env.EXPO_PUBLIC_API_URL?.trim();
+
+function normalizeApiBaseUrl(value: string): string {
+  let parsedUrl: URL;
+
+  try {
+    parsedUrl = new URL(value);
+  } catch {
+    throw new Error(
+      `Invalid EXPO_PUBLIC_API_URL: ${value}. Use an absolute http(s) URL.`,
+    );
+  }
+
+  if (parsedUrl.protocol !== "http:" && parsedUrl.protocol !== "https:") {
+    throw new Error(
+      `Invalid EXPO_PUBLIC_API_URL protocol: ${parsedUrl.protocol}. Use http or https.`,
+    );
+  }
+
+  return value.replace(/\/+$/, "");
+}
+
+export const API_BASE_URL = configuredApiUrl
+  ? normalizeApiBaseUrl(configuredApiUrl)
+  : "";
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -28,6 +38,12 @@ export const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use(async (config) => {
+  if (!API_BASE_URL) {
+    throw new Error(
+      "API_BASE_URL is not configured. Set EXPO_PUBLIC_API_URL and restart Expo.",
+    );
+  }
+
   const token = await getItem(ACCESS_TOKEN_KEY);
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -38,6 +54,17 @@ apiClient.interceptors.request.use(async (config) => {
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
+    if (__DEV__) {
+      console.error("API request failed", {
+        baseUrl: API_BASE_URL || "<missing>",
+        endpoint: error?.config?.url || "<unknown>",
+        method: error?.config?.method?.toUpperCase() || "<unknown>",
+        code: error?.code || "<none>",
+        hasResponse: Boolean(error?.response),
+        status: error?.response?.status,
+      });
+    }
+
     let message = "An unexpected server error occurred.";
 
     if (error?.response) {
