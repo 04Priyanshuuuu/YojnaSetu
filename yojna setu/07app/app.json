@@ -29,12 +29,17 @@
       "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#091928",
-        "backgroundImage": "./assets/images/android-icon-background.png",
         "foregroundImage": "./assets/images/android-icon-foreground.png"
       }
     },
     "ios": {
       "supportsTablet": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "9bd6734e-3ce2-40e4-8628-6f8bbe40f153"
+      }
     }
   }
 }
