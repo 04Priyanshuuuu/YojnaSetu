@@ -6,6 +6,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
+    "icon": "./assets/images/icon.png",
     "assetBundlePatterns": ["**/*"],
     "plugins": [
       "expo-router",
@@ -24,7 +25,13 @@
       "typedRoutes": true
     },
     "android": {
-      "package": "com.yojnasetu.mobile"
+      "package": "com.yojnasetu.mobile",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#091928",
+        "backgroundImage": "./assets/images/android-icon-background.png",
+        "foregroundImage": "./assets/images/android-icon-foreground.png"
+      }
     },
     "ios": {
       "supportsTablet": true
