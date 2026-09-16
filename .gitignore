@@ -36,6 +36,13 @@ uploads/
 *.jpeg
 scratch/
 
+# Keep the YojnaSetu Android brand assets available to Expo/EAS uploads
+!yojna setu/07app/assets/images/
+!yojna setu/07app/assets/images/*.png
+!yojna setu/07app/assets/images/icon.png
+!yojna setu/07app/assets/images/android-icon-foreground.png
+!yojna setu/07app/assets/images/android-icon-background.png
+
 # Environment variables & secrets
 .env
 .env.local
