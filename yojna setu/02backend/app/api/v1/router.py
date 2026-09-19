@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import auth, profile, schemes, recommendations, applications, partner, calculator, ai, admin, notifications, saved_schemes, health
+from app.api.v1.endpoints import auth, profile, schemes, recommendations, applications, partner, calculator, ai, admin, notifications, saved_schemes, health, ingestion, financial_health
 
 api_router = APIRouter()
 
@@ -11,7 +11,11 @@ api_router.include_router(recommendations.router, prefix="/recommendations", tag
 api_router.include_router(applications.router, prefix="/applications", tags=["Beneficiary Applications"])
 api_router.include_router(saved_schemes.router, prefix="/saved-schemes", tags=["Saved Schemes"])
 api_router.include_router(partner.router, prefix="/partner", tags=["Partner & Authority Review"])
+api_router.include_router(partner.router, prefix="/partners", tags=["Partner & Authority Review"])
 api_router.include_router(admin.router, prefix="/admin", tags=["System Admin & Management"])
 api_router.include_router(calculator.router, prefix="/calculator", tags=["Financial Calculator"])
+api_router.include_router(financial_health.router, prefix="/financial-health", tags=["Financial Health & Suitability"])
 api_router.include_router(ai.router, prefix="/ai", tags=["AI & NLP Intelligence Layer"])
 api_router.include_router(notifications.router, prefix="/notifications", tags=["Notifications & Alerts"])
+api_router.include_router(ingestion.router, prefix="/ingestion", tags=["Dynamic Scheme Data Ingestion Pipeline"])
+
