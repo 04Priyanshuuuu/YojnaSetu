@@ -1,5 +1,5 @@
 {
-  "buildCommand": "node scripts/build-frontend.cjs",
+  "buildCommand": "npm --prefix \"yojna setu/01frontend\" install && npm --prefix \"yojna setu/01frontend\" run build",
   "outputDirectory": "yojna setu/01frontend/dist",
   "rewrites": [
     {
