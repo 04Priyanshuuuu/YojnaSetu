@@ -362,6 +362,31 @@ export const Recommendations: React.FC = () => {
   const [formProjectCostSlab, setFormProjectCostSlab] = useState<number>(100000);
   const [formLoanRequired, setFormLoanRequired] = useState<boolean>(true);
 
+  // Multi-step Quick Eligibility Form
+const [formStep, setFormStep] = useState<number>(1);
+const TOTAL_FORM_STEPS = 6;
+
+const goToNextFormStep = () => {
+  setFormStep((prev) => Math.min(TOTAL_FORM_STEPS, prev + 1));
+};
+
+const goToPreviousFormStep = () => {
+  setFormStep((prev) => Math.max(1, prev - 1));
+};
+
+const resetMultiStepForm = () => {
+  setFormStep(1);
+  setFormAge(28);
+  setFormGender('FEMALE');
+  setFormState('UTTAR_PRADESH');
+  setFormSocialCategory('SC');
+  setFormIncomeSlab(180000);
+  setFormNeed('START_BUSINESS');
+  setFormBusinessStage('NEW');
+  setFormProjectCostSlab(100000);
+  setFormLoanRequired(true);
+};
+
   // Recommendation Results State
   const [topK] = useState(10);
   const [activeTab, setActiveTab] = useState<TabFilter>('ELIGIBLE');
@@ -984,77 +1009,277 @@ export const Recommendations: React.FC = () => {
       )}
 
       {/* INPUT INTERFACE 2: QUICK FORM */}
-      {inputMode === 'FORM' && (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-md p-6 sm:p-8 space-y-6">
-          {/* Temporary Simulation Indicator & Profile Sync Options */}
-          <div className="bg-sky-50 border border-sky-200 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-sky-900">
-            <div className="flex items-center gap-2">
-              <Info className="w-4 h-4 text-sky-600 shrink-0" />
-              <span>
-                {t('recommendations.simulatingNotice', 'Temporary simulation: Modifying these fields evaluates schemes without overwriting your saved profile.')}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <button
-                type="button"
-                onClick={handleResetToStoredProfile}
-                className="px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold transition flex items-center gap-1"
-              >
-                <RefreshCw className="w-3 h-3 text-slate-500" />
-                {t('recommendations.resetToStored', 'Reset to Stored')}
-              </button>
-              <button
-                type="button"
-                onClick={handleSaveFormToProfile}
-                disabled={isSavingProfile}
-                className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-bold transition flex items-center gap-1 disabled:opacity-50 shadow-xs"
-              >
-                {isSavingProfile ? (
-                  <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <User className="w-3 h-3 text-sky-300" />
+      {/* INPUT INTERFACE 2: QUICK FORM - MYSCHEME STYLE MULTI STEP */}
+{inputMode === 'FORM' && (
+  <div className="bg-white rounded-2xl border border-slate-200 shadow-md overflow-hidden">
+
+    {/* ─────────────────────────────────────────────
+        FORM HEADER
+    ───────────────────────────────────────────── */}
+    <div className="bg-gradient-to-r from-[#7f1424] via-[#8f1729] to-[#6f1020] px-5 sm:px-8 py-6 text-white">
+      <div className="max-w-3xl mx-auto text-center">
+
+        <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-3 py-1 text-[10px] sm:text-xs font-bold mb-3">
+          <CheckCircle2 className="w-3.5 h-3.5" />
+          {t(
+            'recommendations.quickFormBadge',
+            'Quick Eligibility Form'
+          )}
+        </div>
+
+        <h2 className="text-xl sm:text-2xl font-extrabold">
+          {t(
+            'recommendations.quickFormTitle',
+            'Help us find the best schemes for you'
+          )}
+        </h2>
+
+        <p className="text-[11px] sm:text-xs text-white/75 mt-1.5">
+          {t(
+            'recommendations.quickFormDesc',
+            'Answer a few simple questions to discover schemes you may be eligible for.'
+          )}
+        </p>
+      </div>
+    </div>
+
+    {/* ─────────────────────────────────────────────
+        PROGRESS STEPS
+    ───────────────────────────────────────────── */}
+    <div className="px-5 sm:px-10 pt-7 pb-3">
+      <div className="max-w-2xl mx-auto">
+
+        <div className="flex items-center justify-center">
+          {Array.from({ length: TOTAL_FORM_STEPS }).map((_, index) => {
+            const stepNumber = index + 1;
+            const isCompleted = stepNumber < formStep;
+            const isCurrent = stepNumber === formStep;
+
+            return (
+              <React.Fragment key={stepNumber}>
+
+                <div
+                  className={`relative flex items-center justify-center shrink-0 transition-all duration-300 ${
+                    isCurrent
+                      ? 'w-8 h-8'
+                      : 'w-6 h-6'
+                  }`}
+                >
+                  <div
+                    className={`rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                      isCompleted
+                        ? 'w-6 h-6 bg-emerald-600 border-emerald-600 text-white'
+                        : isCurrent
+                        ? 'w-8 h-8 bg-white border-emerald-600 text-emerald-700 ring-4 ring-emerald-100'
+                        : 'w-6 h-6 bg-white border-slate-300 text-slate-400'
+                    }`}
+                  >
+                    {isCompleted ? (
+                      <Check className="w-3.5 h-3.5" />
+                    ) : (
+                      <span className="text-[9px] font-extrabold">
+                        {stepNumber}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {stepNumber < TOTAL_FORM_STEPS && (
+                  <div
+                    className={`h-0.5 w-8 sm:w-14 md:w-20 transition-all duration-300 ${
+                      stepNumber < formStep
+                        ? 'bg-emerald-600'
+                        : 'bg-slate-200'
+                    }`}
+                  />
                 )}
-                {t('recommendations.updateMyProfileBtn', 'Update My Profile')}
-              </button>
+
+              </React.Fragment>
+            );
+          })}
+        </div>
+
+        {/* Step label */}
+        <div className="text-center mt-3">
+          <span className="text-[10px] sm:text-xs font-bold text-slate-500">
+            {t('recommendations.stepLabel', 'Step')} {formStep} {t('recommendations.ofLabel', 'of')} {TOTAL_FORM_STEPS}
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+    {/* ─────────────────────────────────────────────
+        FORM BODY
+    ───────────────────────────────────────────── */}
+    <div className="px-5 sm:px-10 pb-8">
+
+      {/* Temporary Profile Notice */}
+      <div className="max-w-4xl mx-auto mb-5 bg-sky-50 border border-sky-200 rounded-xl p-3 sm:p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+
+        <div className="flex items-start gap-2 text-[11px] sm:text-xs text-sky-900">
+          <Info className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
+
+          <span>
+            {t(
+              'recommendations.simulatingNotice',
+              'Temporary simulation: Modifying these fields evaluates schemes without overwriting your saved profile.'
+            )}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+
+          <button
+            type="button"
+            onClick={resetMultiStepForm}
+            className="px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold transition flex items-center gap-1 text-[10px] sm:text-[11px]"
+          >
+            <RefreshCw className="w-3 h-3 text-slate-500" />
+            {t(
+              'recommendations.resetForm',
+              'Reset Form'
+            )}
+          </button>
+
+        </div>
+      </div>
+
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+
+          if (formStep < TOTAL_FORM_STEPS) {
+            goToNextFormStep();
+          } else {
+            handleFindSchemes(e);
+          }
+        }}
+        className="max-w-3xl mx-auto"
+      >
+
+        {/* ═══════════════════════════════════════════
+            STEP 1 — ABOUT YOURSELF
+        ═══════════════════════════════════════════ */}
+        {formStep === 1 && (
+          <div className="min-h-[300px] flex flex-col justify-center">
+
+            <div className="text-center mb-7">
+              <div className="w-11 h-11 mx-auto rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center mb-3">
+                <User className="w-5 h-5" />
+              </div>
+
+              <h3 className="text-lg sm:text-xl font-extrabold text-slate-900">
+                {t(
+                  'recommendations.step1Title',
+                  'Tell us about yourself'
+                )}
+              </h3>
+
+              <p className="text-xs text-slate-500 mt-1">
+                {t(
+                  'recommendations.step1Desc',
+                  'Let us know your age and gender.'
+                )}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+              {/* Gender */}
+              <div>
+                <label className="block font-bold text-slate-700 text-xs mb-2">
+                  {t('profile.gender', 'Gender')}
+                </label>
+
+                <select
+                  value={formGender}
+                  onChange={(e) => setFormGender(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none font-medium bg-white"
+                >
+                  <option value="FEMALE">
+                    {t('gender.female', 'Female')}
+                  </option>
+
+                  <option value="MALE">
+                    {t('gender.male', 'Male')}
+                  </option>
+
+                  <option value="TRANSGENDER">
+                    {t('gender.transgender', 'Transgender')}
+                  </option>
+
+                  <option value="OTHER">
+                    {t('gender.other', 'Other')}
+                  </option>
+                </select>
+              </div>
+
+              {/* Age */}
+              <div>
+                <label className="block font-bold text-slate-700 text-xs mb-2">
+                  {t('profile.age', 'Applicant Age')} ({t('common.years', 'years')})
+                </label>
+
+                <input
+                  type="number"
+                  min={14}
+                  max={120}
+                  value={formAge}
+                  onChange={(e) => setFormAge(Number(e.target.value))}
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none font-medium"
+                  required
+                />
+              </div>
+
             </div>
           </div>
+        )}
 
-          <form onSubmit={handleFindSchemes} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-xs">
-            <div>
-              <label className="block font-bold text-slate-700 uppercase tracking-wider mb-1.5">{t('profile.age', 'Applicant Age')}</label>
-              <input
-                type="number"
-                min={14}
-                max={120}
-                value={formAge}
-                onChange={(e) => setFormAge(Number(e.target.value))}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-gov-blue outline-none font-medium"
-                required
-              />
+        {/* ═══════════════════════════════════════════
+            STEP 2 — LOCATION
+        ═══════════════════════════════════════════ */}
+        {formStep === 2 && (
+          <div className="min-h-[300px] flex flex-col justify-center">
+
+            <div className="text-center mb-7">
+              <div className="w-11 h-11 mx-auto rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center mb-3">
+                <MapPin className="w-5 h-5" />
+              </div>
+
+              <h3 className="text-lg sm:text-xl font-extrabold text-slate-900">
+                {t(
+                  'recommendations.step2Title',
+                  'Where do you live?'
+                )}
+              </h3>
+
+              <p className="text-xs text-slate-500 mt-1">
+                {t(
+                  'recommendations.step2Desc',
+                  'Your state helps us find state-specific and central government schemes.'
+                )}
+              </p>
             </div>
 
-            <div>
-              <label className="block font-bold text-slate-700 uppercase tracking-wider mb-1.5">{t('profile.gender', 'Gender')}</label>
-              <select
-                value={formGender}
-                onChange={(e) => setFormGender(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-gov-blue outline-none font-medium bg-white"
-              >
-                <option value="FEMALE">{t('gender.female', 'Female')}</option>
-                <option value="MALE">{t('gender.male', 'Male')}</option>
-                <option value="TRANSGENDER">{t('gender.transgender', 'Transgender')}</option>
-                <option value="OTHER">{t('gender.other', 'Other')}</option>
-              </select>
-            </div>
+            <div className="max-w-xl mx-auto w-full">
 
-            <div>
-              <label className="block font-bold text-slate-700 uppercase tracking-wider mb-1.5">{t('profile.state', 'State')}</label>
+              <label className="block font-bold text-slate-700 text-xs mb-2">
+                {t('profile.state', 'State of Residence')}
+              </label>
+
               <select
                 value={formState}
                 onChange={(e) => setFormState(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-gov-blue outline-none font-medium bg-white"
+                className="w-full px-4 py-3.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none font-medium bg-white"
               >
-                <option value="ALL_INDIA">{t('states.allIndia', 'All India / Central Scheme')}</option>
+                <option value="ALL_INDIA">
+                  {t(
+                    'states.allIndia',
+                    'All India / Central Scheme'
+                  )}
+                </option>
+
                 <option value="UTTAR_PRADESH">Uttar Pradesh</option>
                 <option value="MAHARASHTRA">Maharashtra</option>
                 <option value="BIHAR">Bihar</option>
@@ -1066,71 +1291,453 @@ export const Recommendations: React.FC = () => {
                 <option value="GUJARAT">Gujarat</option>
                 <option value="DELHI">Delhi</option>
               </select>
+
+            </div>
+          </div>
+        )}
+
+        {/* ═══════════════════════════════════════════
+            STEP 3 — SOCIAL CATEGORY
+        ═══════════════════════════════════════════ */}
+        {formStep === 3 && (
+          <div className="min-h-[300px] flex flex-col justify-center">
+
+            <div className="text-center mb-7">
+              <div className="w-11 h-11 mx-auto rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center mb-3">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+
+              <h3 className="text-lg sm:text-xl font-extrabold text-slate-900">
+                {t(
+                  'recommendations.step3Title',
+                  'What is your social category?'
+                )}
+              </h3>
+
+              <p className="text-xs text-slate-500 mt-1">
+                {t(
+                  'recommendations.step3Desc',
+                  'Some government schemes are designed for specific communities.'
+                )}
+              </p>
             </div>
 
-            <div>
-              <label className="block font-bold text-slate-700 uppercase tracking-wider mb-1.5">{t('profile.socialCategory', 'Social Category')}</label>
+            <div className="max-w-xl mx-auto w-full">
+
+              <label className="block font-bold text-slate-700 text-xs mb-2">
+                {t(
+                  'profile.socialCategory',
+                  'Social Category'
+                )}
+              </label>
+
               <select
                 value={formSocialCategory}
                 onChange={(e) => setFormSocialCategory(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-gov-blue outline-none font-medium bg-white"
+                className="w-full px-4 py-3.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none font-medium bg-white"
               >
-                <option value="SC">{t('category.sc', 'Scheduled Caste (SC - NSFDC Concessional Loans)')}</option>
-                <option value="OBC">{t('category.obc', 'Other Backward Class (OBC - NBCFDC Loans)')}</option>
-                <option value="ST">{t('category.st', 'Scheduled Tribe (ST - NSTFDC Concessional Loans)')}</option>
-                <option value="MINORITY">{t('category.minority', 'Notified Minority Community (NMDFC Schemes)')}</option>
-                <option value="GENERAL">{t('category.general', 'General / Unreserved')}</option>
+                <option value="SC">
+                  {t(
+                    'category.sc',
+                    'Scheduled Caste (SC - NSFDC Concessional Loans)'
+                  )}
+                </option>
+
+                <option value="OBC">
+                  {t(
+                    'category.obc',
+                    'Other Backward Class (OBC - NBCFDC Loans)'
+                  )}
+                </option>
+
+                <option value="ST">
+                  {t(
+                    'category.st',
+                    'Scheduled Tribe (ST - NSTFDC Concessional Loans)'
+                  )}
+                </option>
+
+                <option value="MINORITY">
+                  {t(
+                    'category.minority',
+                    'Notified Minority Community (NMDFC Schemes)'
+                  )}
+                </option>
+
+                <option value="GENERAL">
+                  {t(
+                    'category.general',
+                    'General / Unreserved'
+                  )}
+                </option>
               </select>
+
+            </div>
+          </div>
+        )}
+
+        {/* ═══════════════════════════════════════════
+            STEP 4 — INCOME
+        ═══════════════════════════════════════════ */}
+        {formStep === 4 && (
+          <div className="min-h-[300px] flex flex-col justify-center">
+
+            <div className="text-center mb-7">
+              <div className="w-11 h-11 mx-auto rounded-xl bg-green-50 text-green-700 flex items-center justify-center mb-3 text-lg font-black">
+                ₹
+              </div>
+
+              <h3 className="text-lg sm:text-xl font-extrabold text-slate-900">
+                {t(
+                  'recommendations.step4Title',
+                  'What is your annual family income?'
+                )}
+              </h3>
+
+              <p className="text-xs text-slate-500 mt-1">
+                {t(
+                  'recommendations.step4Desc',
+                  'Income is an important eligibility factor for many welfare schemes.'
+                )}
+              </p>
             </div>
 
-            <div>
-              <label className="block font-bold text-slate-700 uppercase tracking-wider mb-1.5">{t('profile.annualIncome', 'Annual Family Income (₹)')}</label>
+            <div className="max-w-xl mx-auto w-full">
+
+              <label className="block font-bold text-slate-700 text-xs mb-2">
+                {t(
+                  'profile.annualIncome',
+                  'Annual Family Income (₹)'
+                )}
+              </label>
+
               <select
                 value={formIncomeSlab}
-                onChange={(e) => setFormIncomeSlab(Number(e.target.value))}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-gov-blue outline-none font-medium bg-white"
+                onChange={(e) =>
+                  setFormIncomeSlab(Number(e.target.value))
+                }
+                className="w-full px-4 py-3.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none font-medium bg-white"
               >
-                <option value={90000}>Below ₹1 Lakh (₹90,000)</option>
-                <option value={180000}>₹1 Lakh – ₹2 Lakh (₹1,80,000)</option>
-                <option value={300000}>₹2 Lakh – ₹3 Lakh (₹3,00,000)</option>
-                <option value={500000}>₹3 Lakh – ₹5 Lakh (₹5,00,000)</option>
-                <option value={1000000}>Above ₹5 Lakh (₹10,00,000)</option>
-              </select>
-            </div>
+                <option value={90000}>
+                  Below ₹1 Lakh (₹90,000)
+                </option>
 
-            <div>
-              <label className="block font-bold text-slate-700 uppercase tracking-wider mb-1.5">{t('profile.projectCost', 'Project Cost')}</label>
-              <select
-                value={formProjectCostSlab}
-                onChange={(e) => setFormProjectCostSlab(Number(e.target.value))}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-gov-blue outline-none font-medium bg-white"
-              >
-                <option value={50000}>Up to ₹50,000</option>
-                <option value={100000}>₹1,00,000 (Micro Loan)</option>
-                <option value={500000}>₹5,00,000 (Term Loan / Vikas)</option>
-                <option value={1500000}>₹15,00,000 (Major Unit)</option>
-                <option value={5000000}>Above ₹50,00,000</option>
-              </select>
-            </div>
+                <option value={180000}>
+                  ₹1 Lakh – ₹2 Lakh (₹1,80,000)
+                </option>
 
-            <div className="sm:col-span-2 lg:col-span-3 pt-2">
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-6 rounded-xl text-xs shadow-lg transition flex items-center justify-center gap-2 disabled:opacity-50"
-              >
-                {isLoading ? (
-                  <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                ) : (
-                  <>
-                    <Send className="w-4 h-4" /> {t('recommendations.evaluateBtn', 'Evaluate Scheme Eligibility & Rank')}
-                  </>
+                <option value={300000}>
+                  ₹2 Lakh – ₹3 Lakh (₹3,00,000)
+                </option>
+
+                <option value={500000}>
+                  ₹3 Lakh – ₹5 Lakh (₹5,00,000)
+                </option>
+
+                <option value={1000000}>
+                  Above ₹5 Lakh (₹10,00,000)
+                </option>
+              </select>
+
+            </div>
+          </div>
+        )}
+
+        {/* ═══════════════════════════════════════════
+            STEP 5 — REQUIREMENT
+        ═══════════════════════════════════════════ */}
+        {formStep === 5 && (
+          <div className="min-h-[300px] flex flex-col justify-center">
+
+            <div className="text-center mb-6">
+              <div className="w-11 h-11 mx-auto rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center mb-3">
+                <Sparkles className="w-5 h-5" />
+              </div>
+
+              <h3 className="text-lg sm:text-xl font-extrabold text-slate-900">
+                {t(
+                  'recommendations.step5Title',
+                  'What kind of support do you need?'
                 )}
-              </button>
+              </h3>
+
+              <p className="text-xs text-slate-500 mt-1">
+                {t(
+                  'recommendations.step5Desc',
+                  'Choose the option that best describes what you want to achieve.'
+                )}
+              </p>
             </div>
-          </form>
+
+            <div className="space-y-5">
+
+              <div>
+                <label className="block font-bold text-slate-700 text-xs mb-2">
+                  {t(
+                    'recommendations.needLabel',
+                    'I need support for'
+                  )}
+                </label>
+
+                <select
+                  value={formNeed}
+                  onChange={(e) => setFormNeed(e.target.value)}
+                  className="w-full px-4 py-3.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none font-medium bg-white"
+                >
+                  <option value="START_BUSINESS">
+                    {t(
+                      'recommendations.needStartBusiness',
+                      'Starting a new business'
+                    )}
+                  </option>
+
+                  <option value="EXPAND_BUSINESS">
+                    {t(
+                      'recommendations.needExpandBusiness',
+                      'Expanding an existing business'
+                    )}
+                  </option>
+
+                  <option value="EDUCATION">
+                    {t(
+                      'recommendations.needEducation',
+                      'Education / Higher Education'
+                    )}
+                  </option>
+
+                  <option value="SKILL_TRAINING">
+                    {t(
+                      'recommendations.needSkillTraining',
+                      'Skill Training / Vocational Training'
+                    )}
+                  </option>
+
+                  <option value="AGRICULTURE">
+                    {t(
+                      'recommendations.needAgriculture',
+                      'Agriculture / Allied Activities'
+                    )}
+                  </option>
+
+                  <option value="HOUSING">
+                    {t(
+                      'recommendations.needHousing',
+                      'Housing / Home Improvement'
+                    )}
+                  </option>
+                </select>
+              </div>
+
+              {/* Business Stage */}
+              {(formNeed === 'START_BUSINESS' ||
+                formNeed === 'EXPAND_BUSINESS') && (
+                <div>
+                  <label className="block font-bold text-slate-700 text-xs mb-2">
+                    {t(
+                      'recommendations.businessStageLabel',
+                      'Business Stage'
+                    )}
+                  </label>
+
+                  <select
+                    value={formBusinessStage}
+                    onChange={(e) =>
+                      setFormBusinessStage(e.target.value)
+                    }
+                    className="w-full px-4 py-3.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none font-medium bg-white"
+                  >
+                    <option value="CONCEPT">
+                      {t(
+                        'recommendations.stageConcept',
+                        'Just an idea / planning stage'
+                      )}
+                    </option>
+
+                    <option value="NEW">
+                      {t(
+                        'recommendations.stageNew',
+                        'Starting a new unit'
+                      )}
+                    </option>
+
+                    <option value="EXISTING">
+                      {t(
+                        'recommendations.stageExisting',
+                        'Existing business'
+                      )}
+                    </option>
+                  </select>
+                </div>
+              )}
+
+            </div>
+          </div>
+        )}
+
+        {/* ═══════════════════════════════════════════
+            STEP 6 — PROJECT COST
+        ═══════════════════════════════════════════ */}
+        {formStep === 6 && (
+          <div className="min-h-[300px] flex flex-col justify-center">
+
+            <div className="text-center mb-7">
+              <div className="w-11 h-11 mx-auto rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center mb-3">
+                <CalcIcon className="w-5 h-5" />
+              </div>
+
+              <h3 className="text-lg sm:text-xl font-extrabold text-slate-900">
+                {t(
+                  'recommendations.step6Title',
+                  'Tell us about your financial requirement'
+                )}
+              </h3>
+
+              <p className="text-xs text-slate-500 mt-1">
+                {t(
+                  'recommendations.step6Desc',
+                  'This helps us match you with suitable loan, subsidy and support schemes.'
+                )}
+              </p>
+            </div>
+
+            <div className="space-y-5 max-w-xl mx-auto w-full">
+
+              {/* Project Cost */}
+              <div>
+                <label className="block font-bold text-slate-700 text-xs mb-2">
+                  {t(
+                    'profile.projectCost',
+                    'Estimated Project Cost'
+                  )}
+                </label>
+
+                <select
+                  value={formProjectCostSlab}
+                  onChange={(e) =>
+                    setFormProjectCostSlab(Number(e.target.value))
+                  }
+                  className="w-full px-4 py-3.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none font-medium bg-white"
+                >
+                  <option value={50000}>
+                    Up to ₹50,000
+                  </option>
+
+                  <option value={100000}>
+                    ₹1,00,000 (Micro Loan)
+                  </option>
+
+                  <option value={500000}>
+                    ₹5,00,000 (Term Loan / Vikas)
+                  </option>
+
+                  <option value={1500000}>
+                    ₹15,00,000 (Major Unit)
+                  </option>
+
+                  <option value={5000000}>
+                    Above ₹50,00,000
+                  </option>
+                </select>
+              </div>
+
+              {/* Loan Required */}
+              <div>
+                <label className="block font-bold text-slate-700 text-xs mb-2">
+                  {t(
+                    'recommendations.loanRequiredLabel',
+                    'Do you need a loan / financial assistance?'
+                  )}
+                </label>
+
+                <div className="grid grid-cols-2 gap-3">
+
+                  <button
+                    type="button"
+                    onClick={() => setFormLoanRequired(true)}
+                    className={`py-3.5 rounded-xl border-2 text-sm font-bold transition ${
+                      formLoanRequired
+                        ? 'border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-100'
+                        : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                    }`}
+                  >
+                    ✓ {t('common.yes', 'Yes')}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setFormLoanRequired(false)}
+                    className={`py-3.5 rounded-xl border-2 text-sm font-bold transition ${
+                      !formLoanRequired
+                        ? 'border-slate-600 bg-slate-50 text-slate-800 ring-2 ring-slate-100'
+                        : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                    }`}
+                  >
+                    {t('common.no', 'No')}
+                  </button>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        )}
+
+        {/* ─────────────────────────────────────────────
+            NAVIGATION BUTTONS
+        ───────────────────────────────────────────── */}
+        <div className="border-t border-slate-100 pt-5 mt-2 flex items-center justify-between gap-3">
+
+          {/* Back */}
+          <button
+            type="button"
+            onClick={goToPreviousFormStep}
+            disabled={formStep === 1 || isLoading}
+            className={`px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 min-h-[42px] ${
+              formStep === 1
+                ? 'text-slate-300 cursor-not-allowed'
+                : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+            }`}
+          >
+            <span>←</span>
+            {t('common.back', 'Back')}
+          </button>
+
+          {/* Step-specific Next / Final Button */}
+          {formStep < TOTAL_FORM_STEPS ? (
+            <button
+              type="submit"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-6 sm:px-8 rounded-xl text-xs shadow-md transition flex items-center gap-2 min-h-[42px]"
+            >
+              {t('common.next', 'Next')}
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          ) : (
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-6 sm:px-8 rounded-xl text-xs shadow-md transition flex items-center justify-center gap-2 min-h-[42px] disabled:opacity-50"
+            >
+              {isLoading ? (
+                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <>
+                  <Send className="w-4 h-4" />
+                  {t(
+                    'recommendations.evaluateBtn',
+                    'Find Matching Schemes'
+                  )}
+                </>
+              )}
+            </button>
+          )}
+
         </div>
-      )}
+
+      </form>
+
+    </div>
+  </div>
+)}
 
       {/* RESULTS LIST SECTION */}
       {standardResult && (
